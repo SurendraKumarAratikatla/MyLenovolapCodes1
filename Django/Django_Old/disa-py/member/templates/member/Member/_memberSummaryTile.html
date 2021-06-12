@@ -1,0 +1,37 @@
+{% autoescape on %}
+<script type="text/template" id="memberSummaryTileTpl">
+    <div>
+        <% if(photo) {%>
+        <img src="<%=photo%>" width="120px" height="120px" alt="image"/>
+        <%} else {%>
+        <img src="/img/user.jpg" width="120px" height="120px" alt="image"/>
+        <% } %>
+    </div>
+    <div style="margin-top: 15px;">
+        <div style="font-weight: bold; text-transform:capitalize;">
+            <a class="view-member">
+            <% if(salutation) { %> <%= salutation %><% } %>
+            <%= name %>
+            <% if(surname) { %> <%= surname %> <% } %>
+            </a>
+        </div>
+
+        <% if(mid) { %>
+        <div class="label label-info"><%= mid %></div>
+        <% } %>
+
+        <% if(place){%>
+        <div><span title="Place" style="text-transform:capitalize;"><i class="icon-map-marker"></i> <%= place %></span></div>
+        <% } %>
+        <%if(email){ %>
+        <div><span title="Email"><i class="icon-envelope"></i> <%= email %></span></div>
+        <% } %>
+        <%if(mobile) { %>
+        <div><span title="Mobile"><i class="icon-mobile-phone"></i> <%= mobile %></span></div>
+        <% } %>
+        <%if(phone) {%>
+        <div><span title="Phone"><i class="icon-phone"></i> <%= phone%></span></div>
+        <% } %>
+    </div>
+</script>
+{% endautoescape %}

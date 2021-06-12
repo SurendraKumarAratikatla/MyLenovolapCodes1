@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="member-details-main">
+            <div class="page-header">
+                <h1>Member Details</h1>
+            </div>
+            <div class="section row">
+                <div class="col-md-7 span7">
+                    <div class="member-details">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-4 center span2">
+                                    <div class="thumbnail member-photo">
+                                        <img src="{% if mem.photo %}{{mem.photo}}{%else%}{% static 'img/user.jpg' %} {%endif%}" class="img-responsive">
+                                    </div>
+                                    <div style="margin-top:10px;" id="file-uploader-view54">
+                                        <div class="qq-uploader">
+                                            <div class="qq-upload-drop-area" style="display: none;"><span>Drop files here to upload</span>
+                                            </div>
+                                            <div class="qq-upload-button btn"
+                                                 style="position: relative; overflow: hidden; direction: ltr;">Upload
+                                                image<input type="file" name="file"
+                                                            style="position: absolute; right: 0px; top: 0px; font-family: Arial; font-size: 118px; margin: 0px; padding: 0px; cursor: pointer; opacity: 0;">
+                                            </div>
+                                            <ul class="qq-upload-list"></ul>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:10px;"><a
+                                            href="/admin/members/0fa5cb7f-112d-4ca8-b427-1db0b86da878/awardee/new">Add
+                                        award</a></div>
+                                </div>
+
+                                <div class="col-md-8 span5" data-original-title="" title="">
+                                    <div class="content-padding">
+                                        <div>
+                                            <h4>
+                                                <span class="label label-info" title="Member Id">MID#{{mem.mid}}</span>
+                        <span class="pull-right edit-member">
+                            <small><a href="{% url 'member-edit' mem.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                        </span>
+                                            </h4>
+                                        </div>
+                                        <div style="padding-bottom: 5px;">
+                                            <h4>
+
+                                                Sri
+
+                                                {{mem.name}}
+
+                                                {{mem.surname}}
+
+                                            </h4>
+
+                                            <div style="margin-top:-2px;">
+                                                <span title="Place" style="text-transform:capitalize;"><i
+                                                        class="fa fa-fw fa-map-marker"></i> {{mem.place}}</span>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div>
+                                            <span title="Email"><i class="fa fa-fw fa-envelope"></i> {{mem.email}}</span>
+                                        </div>
+
+
+                                        <div>
+                                            <span title="Mobile"><i class="fa fa-fw fa-mobile"></i> {{mem.mobile}}</span>
+                                        </div>
+
+
+                                        <div>
+                                            <span title="Phone"><i class="fa fa-fw fa-phone"></i> {{mem.phone}}</span>
+                                        </div>
+                                        <div>
+                                            {% if mem.gotram %}
+                                            <span title="Gotram" style="text-transform:capitalize;"><i class="fa fa-fw fa-anchor"></i>{{mem.gotram }}</span>
+                                            {% endif %}
+                                            {% if mem.nakshatram %}
+                                            <span title="Nakshatram" style="text-transform:capitalize;">,<i class="fa fa-fw fa-star"></i>{{mem.nakshatram }}</span>
+                                            {% endif %}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="section">
+                                        <div class="main-header">
+                                            <h4>Address
+                    <span class="pull-right add-address">
+                        <small><a href="{% url 'member-address' mem.id %}"><i class="fa fa-fw fa-plus"></i>Add</a></small>
+                    </span>
+                                            </h4>
+                                        </div>
+                                        <div class="member-addresses">
+                                            <div class="address-tile-collection row">
+                                                {%if ad %}
+                                                <div class="address-tile col-xs-12">
+                                                    <div class="section box-border-bottom content-padding hover ">
+                                                        <div class="pull-right edit-address hover-show">
+                                                            <small><a href="{% url 'member-address-edit' mem.id ad.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                        </div>
+                                                        <div class="pull-left">
+
+                                                            <div>{{ad.address}}</div>
+                                                            <div>{{ad.city| add:","}}{{ad.district| add:","}}{{ad.state}}
+                                                            </div>
+                                                            <div>{{ad.country}} {{ad.pin}}</div>
+                                                            <div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                                {%endif%}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="member-awards"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 span5">
+                    <div class="seva-details">
+                        <div>
+                            <div class="main-header">
+                                <h4>Seva List
+            <span class="pull-right add-seva">
+            <small><a><i class="fa fa-fw fa-plus"></i>Add</a></small>
+            </span>
+                                </h4>
+                            </div>
+                            <div class="seva-details">
+                                <div class="seva-collection row">
+                                    <div class="seva-details-tile col-xs-12">
+                                        <div class="section box-border-bottom hover seva-tile content-padding">
+                                            <div>
+                                                <h4>
+                                                    <span class="label label-info" title="Seva Id">SS0086</span>
+                <span class="pull-right edit-seva hover-show">
+                    <small><a><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                </span>
+                                                </h4>
+                                            </div>
+
+                                            <div>
+                                                <div>
+                                                    <h4>
+                                                        <i class="fa fa-fw fa-hand-o-right"></i>
+                                                        <span style="margin-left:10px;">Shashwata Seva</span>
+                                                        <small class="muted">(Avadhoota Datta Peetham, Mysore)
+                                                        </small>
+                                                    </h4>
+                                                </div>
+
+                                                <div>
+                <span title="Save in the name of">
+                    <span>
+                        <i class="fa fa-user fa-fw"></i> <small>In name of:</small>
+                    </span>
+                     Donor
+                </span>
+                                                </div>
+
+                                                <div>
+                                                    <span title="Seva Date"><i class="fa fa-fw fa-calendar"></i> 01 February</span>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}

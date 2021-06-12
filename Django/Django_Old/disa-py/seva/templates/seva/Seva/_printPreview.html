@@ -1,0 +1,24 @@
+{% autoescape on %}
+<script type="text/template" id="printPreviewTpl">
+    <div class="page-header no-print">
+        <div class="pull-right" style="margin-top:20px;">
+            <button type="button" class="btn btn-success pull-right" name="print"
+                    style="margin-left:10px;font-weight:bold;"><i class="icon-print icon-white"></i>
+                Print
+            </button>
+            <button type="button" class="btn pull-right" name="back">
+                Back
+            </button>
+        </div>
+        <h1 class="pull-left">Print Preview
+            <small>
+                <% if(templateId=='prasadamDispatch') { %>Prasadam dispatch letter<% }%>
+                <% if(templateId=='addressLabel') { %>Address labels<% }%>
+                <% if(templateId=='dailySevaKarta') { %>Daily Seva Kartas List<% }%>
+                <% if(templateId=='emailCardIssueList') { %> Email Card Issue List <% } %>
+            </small>
+        </h1>
+        <div style="clear:both;"></div>
+    </div>
+</script>
+{% endautoescape %}

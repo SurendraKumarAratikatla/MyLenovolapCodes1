@@ -1,0 +1,112 @@
+/*For search result view*/
+.member-tile {
+    height: 140px;
+    overflow: hidden;
+}
+
+.member-tile .member-photo,
+.member-tile .member-summary {
+    max-height: 130px;
+    overflow: hidden;
+}
+
+.member-tile .member-summary {
+    padding-left: 0;
+}
+
+/*
+  To provide action for search result
+  Display the action div on hover in member tile
+
+*/
+.action {
+    display: none;
+    background-color: #eeeeee;
+    width: 20px;
+    height: 130px;
+    text-align: center;
+}
+
+/*For see more data in seva details page*/
+.see-more {
+    background-color: #eeeeee;
+    cursor: pointer;
+    text-align: center;
+}
+
+.see-more-content {
+    display: none;
+}
+
+/* To provide center alignment to search bar */
+.search-bar {
+    text-align: center;
+}
+
+.member-tile:hover .action {
+    display: block;
+}
+
+/* Provide center alignment fo searched result count message */
+.result-count {
+    text-align: center;
+}
+
+/*Provide cursor pointer to member name and member photo in member details page*/
+.view-details {
+    cursor: pointer;
+}
+
+/*Provide cursor pointer to edit member details icon*/
+.edit-member-details {
+    cursor: pointer;
+}
+
+/* Remove style attribute to list tag */
+ul.member-tile-collection, li {
+    list-style-type: none;
+}
+
+ul.member-tile-collection {
+    margin: auto;
+}
+
+/* MEMBER SEARCH */
+
+.member-search .radio-inline {
+    margin-top: 10px;
+}
+
+.member-search .btn-search-wrapper {
+    margin: 10px 0 0 10px;
+}
+
+.member-search .btn-search-wrapper .btn-search {
+    display: inline;
+}
+
+.member-search .btn-search-wrapper .btn-searching {
+    display: none;
+}
+
+.member-search .btn-search-wrapper.searching .btn-search {
+    display: none;
+}
+
+.member-search .btn-search-wrapper.searching .btn-searching {
+    display: inline;
+}
+
+.member-search-advanced .form-group {
+    margin-bottom: 10px;
+}
+
+.seva-tile small+span {
+    text-transform:capitalize;
+}
+
+/** Member details page **/
+.member-details .gotra,
+.member-details .nakshatra {
+    text-transform:capitalize;
+}

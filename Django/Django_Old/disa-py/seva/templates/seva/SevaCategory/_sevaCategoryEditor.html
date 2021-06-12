@@ -1,0 +1,130 @@
+{% autoescape on %}
+<script type="text/template" id="sevaCategoryEditTpl">
+    <div class="page-header"><h1><% if(!data.id) { %>Add<% } else { %>Edit<% } %> Seva Category </h1></div>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label required" for="organisation">Organisation</label>
+
+            <div class="controls">
+                <select name="organisation" id="organisation">
+                    <option value="">--Select--</option>
+                    <% _.each(data.organisations,function(organisation){ %>
+                    <option value="<%=organisation.id%>"
+                    <% if(data.organisation) { %>
+                    <% if(data.organisation.id==organisation.id){%> selected='selected'<% }
+                    %> <% } %> ><%=
+                    organisation.name%></option>
+                    <% }); %>
+
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="location">Location</label>
+
+            <div class="controls">
+                <select class="location" id="location" name="location">
+                    <option value="">--Select Location--</option>
+                    <% _.each(data.locations, function(loc){ %>
+                    <option value="<%=loc.location%>"
+                            data-organisation="<%=loc.organisation%>"
+                            class=" <% if(data.organisation && data.organisation.id == loc.organisation) {%>show<% } else { %>hide<%}%>"
+                    <% if(data.location==loc.location){ %> selected="selected" <% } %> ><%=loc.location%></option>
+                    <% }); %>
+                    <option value="other">Other</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="control-group other hide">
+            <div class="controls">
+                <input type="text" name="locationName" placeholder="Location Name">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label required" for="code">Seva Code</label>
+
+            <div class="controls">
+                <input type="text" name="code" class="seva-code" id="code" value="<%= data.code %>"
+                        <% if(data.code) { %> readonly="readonly"<% } %>
+                        >
+                <span style="color:red;" class="error-seva-code"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label required" for="name">Name</label>
+
+            <div class="controls">
+                <input type="text" name="name" id="name" value="<%= data.name %>">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label required" for="amount">Amount</label>
+
+            <div class="controls">
+                <input type="text" id="amount" name="amount" value="<%=data.amount %>" >
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="status">Status</label>
+            <div class="controls">
+                <select class="status" id="status" name="status">
+                    <option value=1 <% if (data.status) { %> selected="selected" <% } %> >Enable</option>
+                    <option value=0 <% if (!data.status) { %> selected="selected" <% } %> >Disable</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="sponsorItemType">Sponsor Item Type</label>
+
+            <div class="controls">
+                <input type="text" id="sponsorItemType" name="sponsorItemType" value="<%=data.sponsorItemType %>" >
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label col-md-3" for="recurrence">Recurrence</label>
+            <div class="controls">
+                <select name="recurrence" id="recurrence">
+                    <option value="year" <% if(data.recurrence == 'year'){ %> selected="selected" <% } %> >Yearly</option>
+                    <option value="onetime" <% if(data.recurrence == 'onetime'){ %> selected="selected" <% } %> >Onetime</option>
+                    <option value="day" <% if(data.recurrence == 'day'){ %> selected="selected" <% } %> >Daily</option>
+                    <option value="week" <% if(data.recurrence == 'week'){ %> selected="selected" <% } %> >Weekly</option>
+                    <option value="month" <% if(data.recurrence == 'month'){ %> selected="selected" <% } %> >Monthly</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group" id="duration_div">
+            <label class="control-label required col-md-3" for="durationType">Duration</label>
+            <div class="controls">
+                <select name="durationType" id="durationType">
+                    <option value="life_time" <% if(data.durationType == 'life_time'){ %> selected="selected" <% } %> >Life Time</option>
+                    <option value="day" <% if(data.durationType == 'day'){ %> selected="selected" <% } %> >Day/s</option>
+                    <option value="week" <% if(data.durationType == 'week'){ %> selected="selected" <% } %> >Week/s</option>
+                    <option value="month" <% if(data.durationType == 'month'){ %> selected="selected" <% } %> >Month/s</option>
+                    <option value="year" <% if(data.durationType == 'year'){ %> selected="selected" <% } %> >Year/s</option>
+                </select>
+                <input class="form-control input-mini hide" type="text" id="duration"
+                       value="<%=data.duration %>" name="duration">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="showStartDate">Show Start Date</label>
+
+            <div class="controls">
+                <input type="checkbox" id="showStartDate" name="showStartDate" value="1"
+                       <% if (data.showStartDate == 1) { %> checked="checked" <% } %>
+                        >
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" name="submit" class="btn btn-success">Save</button>
+            <button type="button" name="cancel" class="btn">Cancel</button>
+        </div>
+    </div>
+</script>
+{% endautoescape %}

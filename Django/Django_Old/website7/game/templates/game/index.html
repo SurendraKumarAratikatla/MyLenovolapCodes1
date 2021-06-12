@@ -1,0 +1,14 @@
+{% if all_games %}
+
+<ul>
+    {% for games in all_games %}
+    <li>
+        <a href="/game/">{{games.player1}}</a><br>
+    </li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<h3>your dont have games here</h3>
+
+{% endif %}

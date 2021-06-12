@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div>
+            <div class="page-header">
+                <h1>Address</h1>
+            </div>
+            <div class="section row">
+                <div class="col-md-6">
+                    <div class="address-details">
+                        <div class="address-tile-collection row">
+                            {% for ad in address_list %}
+                                <div class="address-tile col-xs-12">
+                                    <div class="section box-border-bottom content-padding hover ">
+                                        <div class="pull-right edit-address hover-show">
+                                            <small><a href="{% url 'member-address-edit' m_id ad.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                        </div>
+                                        <div class="pull-left">
+
+                                            <div>{{ad.address}}</div>
+                                            <div>{{ad.city| add:","}}{{ad.district| add:","}}{{ad.state}}
+                                            </div>
+                                            <div>{{ad.country}} {{ad.pin}}</div>
+                                            <div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="address-editor">
+                        <div>
+                            <div class="form-horizontal" role="form">
+                                <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="address">Address</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" rows="3" id="address" name="address"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="city">City</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="city" name="city" value="" autocomplete="off" data-typeahead-url="/api/cities">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="district">District</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="district" name="district" value="" autocomplete="off" data-typeahead-url="/api/districts">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="state">State</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="state" name="state" value="" autocomplete="off" data-typeahead-url="/api/states">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="country">Country</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="country" name="country" value="" autocomplete="off" data-typeahead-url="/api/countries">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="pincode">Pin Code</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="pincode" name="pin" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3" for="phone">Phone Number</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" type="text" id="phone" name="phone" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <div class="checkbox">
+                                            <label>
+                                            <input type="checkbox" value="valid" name="is_valid"> Valid
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <div class="checkbox">
+                                            <label>
+                                            <input type="checkbox" value="primary" name="is_primary"> Primary
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group section bg-info">
+                                    <div class="col-sm-10 col-sm-offset-2">
+                                        <button type="submit" name="submit" class="btn btn-primary">Save </button>
+                                        {% if user|can:'VIEW_MEMBER_DETAILS' %}
+                                        <a href="{% url 'member-view' m_id %}" class="btn btn-default">Cancel</a>
+                                        {% elif user|can:'VIEW_SELF_DETAILS' %}
+                                        <a href="{% url 'profile-view' %}" class="btn btn-default">Cancel</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+

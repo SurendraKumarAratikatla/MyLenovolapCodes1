@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block stylesheets %}
+ <style>
+
+        .navbar {
+            margin-bottom: 0;
+        }
+
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
+
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 640px) {
+            /* For mobile screens, the notifier should occupy full width */
+            .humane, .humane-jackedup {
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            /* For mobile screens let the content in hover-show always be shown */
+            .hover .hover-show {
+                opacity: 1;
+            }
+        }
+
+        @media (min-width: 640px) and(max-width: 786px) {
+            /** For tabs let the message notifier message start at 20% **/
+            .humane, .humane-jackedup {
+                top: 0;
+                width: 60%;
+                left: 20%;
+            }
+        }
+
+        .page-header {
+            margin-top: 20px;
+        }
+    </style>
+    <style type="text/css">
+        li {
+            list-style-type: inherit;
+        }
+
+        .link {
+            cursor: pointer;
+        }
+
+        .page-header {
+            background-color: #a08029;
+            margin: 0px;
+            padding: 15px;
+            border-bottom: none;
+        }
+
+        .container {
+            width: 900px;
+            background-color: #ffcc00;
+        }
+
+        body {
+            background-color: #ff9900;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        #footer a {
+            color: #c09853
+        }
+
+        #footer .alert {
+            background-color: #a08029;
+            border: none;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block body_header %}
+    <div class="page-header center">
+        <table style="margin:auto;">
+            <tr>
+                <td>
+                    <div style="margin-right: 30px;">
+                        <img src="{% static 'img/sgslogo.png' %}" style="height: 100px;"/>
+                    </div>
+                </td>
+                <td>
+                    <h2>
+                        <div>DISA</div>
+                        <div>Devotee Information System Administration</div>
+                    </h2>
+                </td>
+                <td>
+                    <div style="margin-left: 30px;">
+                        <img src="{% static 'img/datta.png' %}" style="height: 100px;"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+
+
+{% block body %}
+ <div class="container">
+    <div class="content">
+        <h3 class="strong">Existing Features :</h3>
+        <ul>
+            <li>Extensible and Centralized Devotee information management system.</li>
+            <li>Managing various Organizations, Seva categories in the organization.</li>
+            <li>Managing Seva subscription details of all the devotees.</li>
+            <li>Correlating Devotees Information with various Ashram events, Seva subscriptions</li>
+            <li>Providing information in the form of Reports for Seva Categories, Members by Location, and periodic
+                reports
+            </li>
+            <li>Providing data in easily formatted templates like Prasadam Dispatch letter, Daily Seva Karta list.
+            </li>
+        </ul>
+        <br/>
+
+        <h3 class="strong">Road Ahead :</h3>
+        <ul>
+            <li>Devotee Self Servicing System – Registration, Profile Management, Subscription Check List etc.</li>
+            <li>Connectivity with Facebook and Google accounts, as needed.</li>
+            <li>Ability to automatically communicate with the Devotees either through Email, SMS, Print Out or both.
+            </li>
+            <li>Robust reporting capabilities.</li>
+        </ul>
+    </div>
+
+    <div class="center" style="padding-bottom: 30px;"><a href="{% url 'home' %}" class="btn btn-large btn-success">Click to access
+            DISA</a></div>
+ </div>
+{% endblock %}

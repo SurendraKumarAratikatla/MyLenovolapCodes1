@@ -1,0 +1,1 @@
+message=Dear%20%23name%23%2C%0AJaya%20Guru%20Datta%0A%0AYour%20%23date%23%20will%20be%20performed%20at%20Datta%20Peetham%20on%20%23sevaname%23.%0A%0AYou%20are%20welcome%20to%20attend%20%0A%0AWith%20Best%20Regards%0AIn%20Sadguru%20Seva%0AService%20Team%2C%20SGS%20Ashrama%0AAvadhoota%20Datta%20Peetham.

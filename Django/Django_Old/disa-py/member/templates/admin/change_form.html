@@ -1,0 +1,46 @@
+{% extends 'admin/change_form.html' %}
+{% block after_related_objects %}
+{{ block.super }}
+
+<script type="text/javascript">
+    (function ($) {
+
+        if ($('form input[type=radio]:checked').val() == "lunar") {
+            // This customisation is to to show radio button for lunar/solar calendar and based on the option chosen
+            // next set of options are to be shown.
+            $(".field-maasam, .field-paksham, .field-tithi, .field-nakshatram, .field-raasi, .field-rasi").hide();
+            $(".field-maasam, .field-paksham, .field-tithi").show();
+            $(".field-raasi, .field-nakshatram, .field-rasi").hide();
+        }
+
+        if ($('form input[type=radio]:checked').val() == "solar") {
+            $(".field-maasam, .field-paksham, .field-tithi, .field-nakshatram, .field-raasi, .field-rasi").hide();
+            $(".field-raasi, .field-nakshatram, .field-tithi, .field-rasi").show();
+            $(".field-maasam, .field-paksham").hide();
+        }
+
+
+        $('input:radio[value="lunar"]').click(function () {
+            if ($(this).is(":checked")) {
+                $(".field-maasam, .field-paksham, .field-tithi").show();
+                $(".field-raasi, .field-nakshatram, .field-rasi").hide();
+            }
+        });
+
+        $('input:radio[value="solar"]').click(function () {
+            if ($(this).is(":checked")) {
+                $(".field-raasi, .field-nakshatram, .field-tithi, .field-rasi").show();
+                $(".field-maasam, .field-paksham").hide();
+            }
+        });
+
+        $('input:radio[value="default"]').click(function () {
+            if ($(this).is(":checked")) {
+                $(".field-maasam, .field-paksham, .field-tithi, .field-nakshatram, .field-raasi, .field-rasi").hide();
+            }
+        });
+    })(django.jQuery);
+
+</script>
+
+{% endblock %}

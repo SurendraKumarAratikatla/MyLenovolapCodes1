@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block stylesheets %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Add Relationship</h1>
+        </div>
+        <div class="section">
+        <div class="form-inline center">
+         <form method="post"> 
+           {% csrf_token %}
+            <select id="relationship" name="relationship">
+                <option>---Select Relative Type---</option>
+                    <option value="mother">Mother </option>
+                    <option value="father">Father </option>
+                    <option value="children">Friend </option>
+                    <option value="introducer">sister </option>
+                    <option value="wife">wife </option>
+                    <option value="husband">Husband </option>
+                    <option value="son">son </option>
+                    <option value="daughter">Daughter </option>
+                    <option value="brother">Brother </option>
+                    <option value="cousin">Cousin </option>
+                    <option value="inlaws">Inlaws </option>
+                    <option value="wellwisher">wellwisher </option>
+                    <option value="guru">Guru </option> 
+            </select>
+
+            <button class="btn btn-success" name="submit" type="submit" id="get_href" style="margin-left:5px;">Submit</button>
+            <div>
+
+
+                    <div style="margin-bottom: 10px;">
+                        <label class="radio-inline">
+                            <input type="radio" name="searchBy" value="mid" checked="checked">Member Id</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="searchBy" value="surname">Surname</label>
+                     </div>
+                     <div role="form" class="form-inline row hidden" id="searchBar">
+                        <div class="form-group col-md-6" style="float: none;">
+                            <div class="row">
+                                <input name="search" type="text" class="form-control" id="member-search-common"
+                                       style="width:35%;" placeholder="Surname"
+                                       autofocus="autofocus">
+                            </div>
+                        </div>
+                     </div>
+                     <div class="btn-search-wrapper">
+                            <button class="btn btn-sm btn-primary btn-search">
+                                <span class="glyphicon glyphicon-search txt-search"></span> Search
+                            </button>
+                     </div>
+                </div>
+              </form>
+           </div>
+        </div>
+                <div class="section search-results box-border-top" id="SearchData"></div>
+ 
+  </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script type="text/javascript">
+$(document).on("click", "input[name='searchBy']", function(){
+       var searchBy = $(this).val();
+        // Providing search options based on the search type
+        if (searchBy == 'mid') {
+            if ($('#searchBar').hasClass('hidden')) {
+                $('#searchBar').removeClass('hidden');
+            }
+            // To change place holder
+            $('[name="search"]').attr("placeholder", "Member Id e.g. MID#001, MID#101");
+        } 
+        else {
+            if (!$('#searchBar').hasClass('hidden')) {
+                $('#searchBar').addClass('hidden');
+            }
+            $('[name="search"]').attr("placeholder", "Surname");
+
+        }
+    $("input[type='text']").val("");
+}).on("input", "[type='text']",function(){
+    var searchBy = $('input[name="searchBy"]:checked').val();
+    var data = {};
+    if (searchBy == "surname") {
+        data["surname"] = $('input[name="search"]').val();
+    } else if (searchBy == "mid") {
+        searchKey = $.trim($('input[name="search"]').val());
+        data["mid"] = searchKey.replace(/^\D+/g, "");
+    }
+    $(".btn-search-wrapper").addClass("searching");
+    $.ajax({
+        url: "{% url 'relationship-search' %}?q=" + searchBy,
+        data:data,
+        dataType: "html",
+        success: function(result) {
+            //var table = memberSearchResult(result);
+            $(".btn-search-wrapper").removeClass("searching");
+            $("#SearchData").html(result);
+        },
+        error: function() {}
+    });
+});
+</script>
+{% endblock javascripts %}

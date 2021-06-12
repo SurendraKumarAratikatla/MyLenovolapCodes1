@@ -1,0 +1,671 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block stylesheets %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Add Membership</h1>
+        </div>
+        <div class="section">
+        <div class="form-inline center">
+         <form method="post"> 
+           {% csrf_token %}
+            <select id="membership" name="membership">
+                <option>---Select Membership Type---</option>
+                    <option value="money">Asset-Money Donor</option>
+                    <option value="land">Asset-LAND Donor</option>
+                    <option value="building">Asset-BUILDING Donor</option>
+                    <option value="equipment">Asset-EQUIPMENT Donor</option>
+                    <option value="trustee">Trustee</option>
+                    <option value="inmate">Staff-Inmate</option>
+                    <option value="medical">Staff-Medical</option>
+                    <option value="honorary">Honorary</option>
+                    <option value="complimentary">Complimentary</option>
+            </select>
+
+            <button class="btn btn-success" name="submit" type="submit" id="get_href" style="margin-left:5px;"> Go</button>
+          </form>
+        </div>
+       </div>
+       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+           {% if assetLands %}
+           <div class="panel panel-default">
+               <div class="panel-heading" role="tab" id="headingOne">
+                   <h4 class="panel-title">
+                       <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Asset LAND</a>
+                  </h4>
+               </div>
+               <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                   <div class="panel-body">
+                   {% for land in assetLands %}
+                     {% if land.areacode %}
+                      <div>
+                          <span title="Area Code">Area Code:</span>
+                          <span style="margin-left:10px;"><b>{{land.areacode}}</b></span>
+                      </div>
+                      {% endif %}
+                     {% if land.doc %}
+                      <div>
+                          <span>Doc:</span>
+                          <span style="margin-left:10px;"><b>{{land.doc}}</b></span>
+                      </div>
+                      {% endif %}
+                     {% if land.place %}
+                      <div>
+                          <span>Place:</span>
+                          <span style="margin-left:10px;"><b>{{land.place}}</b></span>
+                      </div>
+                      {% endif %}
+                     {% if land.donee_vendee %}
+                      <div>
+                          <span>Donee Vendee:</span>
+                          <span style="margin-left:10px;"><b>{{land.donee_vendee}}</b></span>
+                      </div>
+                      {% endif %}
+                     {% if land.regn_no %}
+                      <div>
+                          <span>Registration Number:</span>
+                          <span style="margin-left:10px;"><b>{{land.regn_no}}</b></span>
+                      </div>
+                      {% endif %}
+                     {% if land.sub_registrar %}
+                      <div>
+                          <span> Sub Registrar:</span>
+                          <span style="margin-left:10px;">{{land.sub_registrar}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.land_type %}
+                      <div>
+                          <span>Land Type:</span>
+                          <span style="margin-left:10px;">{{land.land_type}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.salutation %}
+                      <div>
+                          <span>Salutation:</span>
+                          <span style="margin-left:10px;">{{land.salutation}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.donor_vendor %}
+                      <div>
+                          <span>Donor Vendor:</span>
+                          <span style="margin-left:10px;">{{land.donor_vendor}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.relationship %}
+                      <div>
+                          <span>Relationship:</span>
+                          <span style="margin-left:10px;">{{land.relationship}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.relative %}
+                      <div>
+                          <span>Relative:</span>
+                          <span style="margin-left:10px;">{{land.relative}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.acrage %}
+                      <div>
+                          <span>Acrage:</span>
+                          <span style="margin-left:10px;">{{land.acrage}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.yards %}
+                      <div>
+                          <span>Yard:</span>
+                          <span style="margin-left:10px;">{{land.yards}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.sqmeter %}
+                      <div>
+                          <span>Square meter:</span>
+                          <span style="margin-left:10px;">{{land.sqmeter}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.survey %}
+                      <div>
+                          <span>Survey:</span>
+                          <span style="margin-left:10px;">{{land.survey}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.address %}
+                      <div>
+                          <span>Address:</span>
+                          <span style="margin-left:10px;">{{land.address}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.state %}
+                      <div>
+                          <span>State:</span>
+                          <span style="margin-left:10px;">{{land.state}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.value %}
+                      <div>
+                          <span>Value(in Rs):</span>
+                          <span style="margin-left:10px;">Rs.{{land.value}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.stamp_worth %}
+                      <div>
+                          <span>Stamp Worth:</span>
+                          <span style="margin-left:10px;">{{land.stamp_worth}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.regn_fees %}
+                      <div>
+                          <span>Registration Fee:</span>
+                          <span style="margin-left:10px;">{{land.regn_fees}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.total %}
+                      <div>
+                          <span>Total(in Rs):</span>
+                          <span style="margin-left:10px;">Rs.{{land.total}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.east %}
+                      <div>
+                          <span>East:</span>
+                          <span style="margin-left:10px;">{{land.east}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.south %}
+                      <div>
+                          <span>South:</span>
+                          <span style="margin-left:10px;">{{land.south}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.west %}
+                      <div>
+                          <span>West:</span>
+                          <span style="margin-left:10px;">{{land.west}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.north %}
+                      <div>
+                          <span>North:</span>
+                          <span style="margin-left:10px;">{{land.north}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.east_west %}
+                      <div>
+                          <span>East West:</span>
+                          <span style="margin-left:10px;">{{land.east_west}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.north_south %}
+                      <div>
+                          <span>North South:</span>
+                          <span style="margin-left:10px;">{{land.north_south}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.description %}
+                      <div>
+                          <span>Description:</span>
+                          <span style="margin-left:10px;">{{land.description}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.original_location %}
+                      <div>
+                          <span>Original location:</span>
+                          <span style="margin-left:10px;">{{land.original_location}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.copygbs %}
+                      <div>
+                          <span>Copy Gbs:</span>
+                          <span style="margin-left:10px;">{{land.copygbs}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.enclosure %}
+                      <div>
+                          <span>Enclosure:</span>
+                          <span style="margin-left:10px;">{{land.enclosure}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.remarks %}
+                      <div>
+                          <span>Remarks:</span>
+                          <span style="margin-left:10px;">{{land.remarks}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.doc_hyperlink %}
+                      <div>
+                          <span>Doc Hyperlink:</span>
+                          <span style="margin-left:10px;">{{land.doc_hyperlink}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.land_usage %}
+                      <div>
+                          <span>Land Usage:</span>
+                          <span style="margin-left:10px;">{{land.land_usage}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.modeofmanagement %}
+                      <div>
+                          <span>Mode Of Management:</span>
+                          <span style="margin-left:10px;">{{land.modeofmanagement}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.typeofinstrument %}
+                      <div>
+                          <span>Type Of Instrument:</span>
+                          <span style="margin-left:10px;">{{land.typeofinstrument}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.annualfees %}
+                      <div>
+                          <span>Annual Fees:</span>
+                          <span style="margin-left:10px;">{{land.annualfees}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.inchargeperson %}
+                      <div>
+                          <span>In charge Person:</span>
+                          <span style="margin-left:10px;">{{land.inchargeperson}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.specialstaus %}
+                      <div>
+                          <span>Special Staus:</span>
+                          <span style="margin-left:10px;">{{land.specialstaus}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.specialinfoindetails %}
+                      <div>
+                          <span>Special Info Details:</span>
+                          <span style="margin-left:10px;">{{land.specialinfoindetails}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.khata %}
+                      <div>
+                          <span>Khata:</span>
+                          <span style="margin-left:10px;">{{land.khata}}</span>
+                      </div>
+                      {% endif %}
+                     {% if land.hyperlinkofmutation %}
+                      <div>
+                          <span>Hyperlink of Mutation:</span>
+                          <span style="margin-left:10px;">{{land.hyperlinkofmutation}}</span>
+                      </div>
+                      {% endif %}
+                   </div>
+                  {% endfor %}
+               </div>
+           </div>
+          {% endif %}
+      </div>
+      {% if assetBuildings %}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingTwo">
+              <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Asset Building</a>
+              </h4>
+          </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+              <div class="panel-body">
+                  <h3>Asset Building Details </h3>
+                  {% for building in assetBuildings %}
+                  {% if building.organisation %}
+                  <div>
+                      <span>Organisation:</span>
+                      <span style="margin-left:10px;">{{building.organisation}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.description %}
+                  <div>
+                      <span>Description:</span>
+                      <span style="margin-left:10px;">{{building.description}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.numberoffloors %}
+                  <div>
+                      <span>Number of Floors:</span>
+                      <span style="margin-left:10px;">{{building.numberoffloors}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.status %}
+                  <div>
+                      <span>Status:</span>
+                      <span style="margin-left:10px;">{{building.status}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.plinthareainsft %}
+                  <div>
+                      <span>Plinth area in sft:</span>
+                      <span style="margin-left:10px;">{{building.plinthareainsft}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.plinthareainsqm %}
+                  <div>
+                      <span>Plinth area in sqm:</span>
+                      <span style="margin-left:10px;">{{building.plinthareainsqm}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.estematedcost %}
+                  <div>
+                      <span>Estemated Cost:</span>
+                      <span style="margin-left:10px;">{{building.estematedcost}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.approvedbyadp %}
+                  <div>
+                      <span>Approved by ADP:</span>
+                      <span style="margin-left:10px;">{{building.approvedbyadp}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.foundationdate %}
+                  <div>
+                      <span>Foundation Date:</span>
+                      <span style="margin-left:10px;">{{building.foundationdate}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.foundationphoto %}
+                  <div>
+                      <span>Foundation Photo:</span>
+                      <span style="margin-left:10px;">
+                      <div class="thumbnail member-photo">
+                          <img src="media/{{building.foundationphoto}}" class="img-responsive">
+                      </div></span>
+                  </div>
+                  {% endif %}
+                  {% if building.inaugrationdate %}
+                  <div>
+                      <span>inaugrationdate:</span>
+                      <span style="margin-left:10px;">{{building.inaugrationdate}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.inaugrationphoto %}
+                  <div>
+                      <span>Inaugration Photo:</span>
+                      <span style="margin-left:10px;">
+                      <div class="thumbnail member-photo">
+                          <img src="{{building.inaugrationphoto}}" class="img-responsive">
+                      </div>
+                      </span>
+                  </div>
+                  {% endif %}
+                  {% if building.latestrenovation %}
+                  <div>
+                      <span>Latest Renovation:</span>
+                      <span style="margin-left:10px;">{{building.latestrenovation}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.renovationphoto %}
+                  <div>
+                      <span>Renovation Photo:</span>
+                      <span style="margin-left:10px;">{{building.renovationphoto}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.maindonors %}
+                  <div>
+                      <span>Main Donors:</span>
+                      <span style="margin-left:10px;">{{building.maindonors}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.structuralplan %}
+                  <div>
+                      <span>Structural Plan:</span>
+                      <span style="margin-left:10px;">{{building.structuralplan}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.structuralplanurl %}
+                  <div>
+                      <span>Structural plan url:</span>
+                      <span style="margin-left:10px;">{{building.structuralplanurl}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.sanctioned %}
+                  <div>
+                      <span>Sanctioned:</span>
+                      <span style="margin-left:10px;">{{building.sanctioned}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.sanctionplanurl %}
+                  <div>
+                      <span>Sanction Plan Url:</span>
+                      <span style="margin-left:10px;">{{building.sanctionplanurl}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.contractorname %}
+                  <div>
+                      <span>Contractor Name :</span>
+                      <span style="margin-left:10px;">{{building.contractorname }}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.contractoraddress %}
+                  <div>
+                      <span>Contractor Address:</span>
+                      <span style="margin-left:10px;">{{building.contractoraddress}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.contractornumber %}
+                  <div>
+                      <span>Contractor Number:</span>
+                      <span style="margin-left:10px;">{{building.contractornumber}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.capitalisedintheaccountof %}
+                  <div>
+                      <span>Capitalised in the account of:</span>
+                      <span style="margin-left:10px;">{{building.capitalisedintheaccountof}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.electricalconnectionnumb %}
+                  <div>
+                      <span>Electrical connection Numb:</span>
+                      <span style="margin-left:10px;">{{building.electricalconnectionnumb}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.sanctionedload %}
+                  <div>
+                      <span>Sanctioned load:</span>
+                      <span style="margin-left:10px;">{{building.sanctionedload}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.currentstate %}
+                  <div>
+                      <span>Current State:</span>
+                      <span style="margin-left:10px;">{{building.currentstate}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.maintenrequirementcost %}
+                  <div>
+                      <span>Maintenance Requirement Cost:</span>
+                      <span style="margin-left:10px;">{{building.maintenrequirementcost}}</span>
+                  </div>
+                  {% endif %}
+                  {% if building.compiled %}
+                  <div>
+                      <span>Compiled:</span>
+                      <span style="margin-left:10px;">{{building.compiled}}</span>
+                  </div>
+                  {% endif %}
+              </div>
+             {% endfor %}
+          </div>
+      </div>
+      {% endif %}
+    </div>
+     {% if assetEquipments %}
+     <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+               <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Asset Equipment</a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="panel-body">
+            {% for equip in assetEquipments %}
+               {% if equip.organisation %}
+                <div>
+                    <span>Organisation:</span>
+                    <span style="margin-left:10px;">{{equip.organisation}}</span>
+                </div>
+                {% endif %}
+               {% if equip.equipmentdescription%}
+                <div>
+                    <span>Equipment description:</span>
+                    <span style="margin-left:10px;">{{equip.equipmentdescription}}</span>
+                </div>
+                {% endif %}
+               {% if equip.estematedcost%}
+                <div>
+                    <span>estematedcost:</span>
+                    <span style="margin-left:10px;">{{equip.estematedcost}}</span>
+                </div>
+                {% endif %}
+               {% if equip.equipmentlifeexpectancy%}
+                <div>
+                    <span>equipmentlifeexpectancy:</span>
+                    <span style="margin-left:10px;">{{equip.equipmentlifeexpectancy}}</span>
+                </div>
+                {% endif %}
+               {% if equip.status%}
+                <div>
+                    <span>status:</span>
+                    <span style="margin-left:10px;">{{equip.status}}</span>
+                </div>
+                {% endif %}
+               {% if equip.approvedbyadp%}
+                <div>
+                    <span>approvedbyadp:</span>
+                    <span style="margin-left:10px;">{{equip.approvedbyadp}}</span>
+                </div>
+                {% endif %}
+               {% if equip.procurementdate%}
+                <div>
+                    <span>procurementdate:</span>
+                    <span style="margin-left:10px;">{{equip.procurementdate}}</span>
+                </div>
+                {% endif %}
+               {% if equip.inaugrationdate %}
+                  <div>
+                      <span>inaugrationdate:</span>
+                      <span style="margin-left:10px;">{{equip.inaugrationdate}}</span>
+                  </div>
+                  {% endif %}
+                  {% if equip.inaugrationphoto %}
+                  <div>
+                      <span>Inaugration Photo:</span>
+                      <span style="margin-left:10px;">
+                      <div class="thumbnail member-photo">
+                          <img src="{{equip.inaugrationphoto}}" class="img-responsive">
+                      </div>
+                      </span>
+                  </div>
+                  {% endif %}
+               {% if equip.latestupkeep%}
+                <div>
+                    <span>Latest Up Keep:</span>
+                    <span style="margin-left:10px;">{{equip.latestupkeep}}</span>
+                </div>
+                {% endif %}
+                {% if equip.latestphoto %}
+                  <div>
+                      <span>Latest Photo:</span>
+                      <span style="margin-left:10px;">
+                      <div class="thumbnail member-photo">
+                          <img src="{{equip.latestphoto}}" class="img-responsive">
+                      </div>
+                      </span>
+                  </div>
+                  {% endif %}
+                 {% if equip.maindonors %}
+                  <div>
+                      <span>Main Donors:</span>
+                      <span style="margin-left:10px;">{{equip.maindonors}}</span>
+                  </div>
+                  {% endif %}
+
+               {% if equip.sizedimension1length%}
+                <div>
+                    <span>sizedimension1length:</span>
+                    <span style="margin-left:10px;">{{equip.sizedimension1length}}</span>
+                </div>
+                {% endif %}
+               {% if equip.sizedimension2bredth%}
+                <div>
+                    <span>sizedimension2bredth:</span>
+                    <span style="margin-left:10px;">{{equip.sizedimension2bredth}}</span>
+                </div>
+                {% endif %}
+               {% if equip.sizedimension3height%}
+                <div>
+                    <span>sizedimension3height:</span>
+                    <span style="margin-left:10px;">{{equip.sizedimension3height}}</span>
+                </div>
+                {% endif %}
+               {% if equip.installationareasqm%}
+                <div>
+                    <span>installationareasqm:</span>
+                    <span style="margin-left:10px;">{{equip.installationareasqm}}</span>
+                </div>
+                {% endif %}
+           </div>
+           {% endfor %}
+        </div>
+     </div>
+    {% endif %}
+     {% if assetMoney %}
+     <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+               <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Money Donor</a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="panel-body">
+            {% for money in assetMoney %}
+                <div>
+                    <span>Occasion :</span>
+                    <span style="margin-left:10px;">{{money.ocassionName}}</span>
+                </div>
+                <div>
+                    <span>Occasion Date:</span>
+                    <span style="margin-left:10px;">{{money.ocassionDate}}</span>
+                </div>
+                <div>
+                    <span>Organisation :</span>
+                    <span style="margin-left:10px;">{{money.organisation}}</span>
+                </div>
+                <div>
+                    <span>Reciept Number:</span>
+                    <span style="margin-left:10px;">{{money.receiptNo}}</span>
+                </div>
+                <div>
+                    <span>Amount :</span>
+                    <span style="margin-left:10px;">{{money.amount}}</span>
+                </div>
+                <div>
+                    <span>Instrument Details :</span>
+                    <span style="margin-left:10px;">{{money.instrumentDetails}}</span>
+                </div>
+                <div>
+                    <span>Date Of Donation :</span>
+                    <span style="margin-left:10px;">{{money.dateOfDonation}}</span>
+                </div>
+                <div>
+                    <span>Note :</span>
+                    <span style="margin-left:10px;">{{money.notes}}</span>
+                </div>
+           </div>
+           {% endfor %}
+        </div>
+     </div>
+    {% endif %}
+</div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script type="text/javascript" src="{%  static 'js/jquery-1.12.1.min.js' %}"></script>
+{% endblock javascripts %}

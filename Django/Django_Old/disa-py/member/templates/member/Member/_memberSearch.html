@@ -1,0 +1,97 @@
+{% autoescape on %}
+<script type="text/template" id="memberSearchTpl">
+    <div class="member-search">
+        <div class="page-header">
+            <h1>Members
+            <span class="pull-right">
+                <button class="btn btn-success add-member">
+                    <i class="glyphicon glyphicon-plus icon-white"></i> Member
+                </button>
+            </span>
+            </h1>
+        </div>
+        <div class="section center">
+            <div style="margin-bottom: 10px;">
+                <label class="radio-inline">
+                    <input type="radio" name="searchBy" value="advanced" checked="checked"/>Advanced</label>
+                <label class="radio-inline">
+                    <input type="radio" name="searchBy" value="mid"/>Member Id</label>
+                <label class="radio-inline">
+                    <input type="radio" name="searchBy" value="all"/>Name, Surname, Place, Email, Mobile</label>
+            </div>
+            <div role="form" class="form-inline row hidden" id="searchBar">
+                <div class="form-group col-md-6" style="float: none;">
+                    <div class="row">
+                        <input name="search" type="text" class="form-control" id="member-search-common"
+                               style="width: 100%;"
+                               placeholder="Name, Surname, Place, E-Mail, Phone "
+                               autofocus="autofocus"/>
+                    </div>
+                </div>
+                <span class="btn-search-wrapper">
+                    <button class="btn btn-sm btn-primary btn-search">
+                        <span class="glyphicon glyphicon-search txt-search"></span> Search
+                    </button>
+                    <button class="btn btn-sm btn-warning btn-searching">
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Searching
+                    </button>
+                </span>
+            </div>
+            <div class="form-inline member-search-advanced" role="form" id="advanced">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-surname">Surname</label>
+                        <input type="text" class="form-control" name="surname" id="advanced-surname"
+                               placeholder="Surname">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-name">Name</label>
+                        <input type="text" class="form-control" name="name" id="advanced-name" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-place">Place</label>
+                        <input type="text" class="form-control" name="place" id="advanced-place"
+                               placeholder="Place">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-email">E-mail</label>
+                        <input type="text" class="form-control" name="email" id="advanced-email"
+                               placeholder="E-mail">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-mobile">Mobile</label>
+                        <input type="text" class="form-control" name="mobile" id="advanced-mobile"
+                               placeholder="Mobile">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="advanced-phone">Phone</label>
+                        <input type="text" class="form-control" name="phone" id="advanced-phone"
+                               placeholder="Phone">
+                    </div>
+                </div>
+                <div class="btn-search-wrapper">
+                    <button class="btn btn-sm btn-primary btn-search">
+                        <span class="glyphicon glyphicon-search txt-search"></span> Search
+                    </button>
+                    <button class="btn btn-sm btn-warning btn-searching">
+                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Searching
+                    </button>
+                    <button class="btn btn-sm btn-search-reset" style="margin-left: 10px;">
+                        Reset
+                    </button>
+                    <a class="member-create" style="margin-left: 10px;"> Create new member</a>
+                </div>
+            </div>
+        </div>
+        <div class="section search-results box-border-top hidden">
+            <div class="muted center">
+                <span class="result-count-value" style="font-weight: bold;"></span> results found
+            </div>
+            <div class="search-results-members"></div>
+        </div>
+    </div>
+</script>
+
+{% endautoescape %}

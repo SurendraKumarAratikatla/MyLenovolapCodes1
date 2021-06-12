@@ -1,0 +1,176 @@
+{% load permission_tags %}
+<div class="navbar navbar-inverse" role="navigation" style="border-radius: 0px;">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">DISA</a>
+
+        </div>
+        {% if request.user.is_authenticated%}
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                
+                {% if user.is_superuser == False %}    
+                {% if user|can:'VIEW_SELF_DETAILS' %}
+                <li><a href="{% url 'profile-view' %}">Member Profile</a></li>
+                {% endif %}
+                {% endif %}
+                
+                {% if user.roles == 'ROLE_ADMIN' or user.roles == 'ROLE_STAFF' %}    
+                {% if user|can:'VIEW_ORGANISATION' %}
+                <li><a href="{% url 'organisation' %}">Organisations</a></li>
+                {% endif %}
+
+                {% if user|can:'VIEW_SEVA_CATEGORY' %}
+                <li><a href="{% url 'seva-cat' %}">Seva Categories</a></li>
+                {% endif %}
+
+
+                {% if user|can:'VIEW_MEMBER_DETAILS' %}
+                <li><a href="{% url 'members' %}">Members</a></li>
+                {% endif %}
+
+                {% if user|can:'EXPORT_REPORTS' %}
+                <li><a href="{% url 'reports_awardee' %}">Awardees</a></li>
+                {% endif %}
+
+                {% if user|can:'SEND_CUSTOM_MESSAGE' %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Communication <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'email' %}">Email</a></li>
+
+                         <li><a href="{% url 'sms' %}">SMS</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if user|can:'EXPORT_REPORTS' %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'reports_seva_templates' %}">Seva Templates</a></li>
+                        <li><a href="{% url 'reports_seva' %}">Seva Info Export </a></li>
+                        <li><a href="{% url 'reports_location' %}">Members By Location</a></li>
+                        <li><a href="{% url 'reports_monthly' %}">Monthly Report</a></li>
+                        <li><a href="{% url 'reports_awardee' %}">Awardees Report</a></li>
+                        <li><a href="{% url 'reports_maasam' %}">Chaandra Maana Reports</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if user|can:'EXPORT_DB' %}
+                <li class="divider-vertical"></li>
+                <li><a href="#">Export DB</a></li>
+                {% endif %}
+
+                {% if user|can:'EXPORT_DB' %}
+                <li class="dropdown">
+                     <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Import <b class="caret"></b></a>
+                     <ul class="dropdown-menu">
+                         <li><a href="{% url 'import-group' %}">Import Group </a></li>
+                         <li><a href="{% url 'group-view' %}">Contact Group View </a></li>
+                     </ul>
+                </li>
+                {% endif %}
+
+                {% endif %}
+
+                {% if user|can:'ACCESS_CONTROL'%}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Access <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user-access' %}">Manage Member Access </a></li>
+                        <li><a href="{% url 'add-user' %}">Add User </a></li>
+                        <li><a href="{% url 'admin:index' %}">Admin Site </a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="divider-vertical"></li>
+                <li class="dropdown">
+                    <a href="javascript:" class="dropdown-toggle pull-right" data-toggle="dropdown">{{request.user.username}}<b
+                            class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'logout' %}">
+                                logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        {%else%}
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li><a class="brand" href="{% url 'login' %}">Login</a></li>
+                    </ul>
+                </div>
+                {%endif%}
+        <!--/.nav-collapse -->
+    </div>
+</div>
+<style>
+    .navbar {
+        margin-bottom: 0;
+    }
+
+    .glyphicon-refresh-animate {
+        -animation: spin .7s infinite linear;
+        -webkit-animation: spin2 .7s infinite linear;
+    }
+
+    @-webkit-keyframes spin2 {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        from {
+            transform: scale(1) rotate(0deg);
+        }
+        to {
+            transform: scale(1) rotate(360deg);
+        }
+    }
+
+    @media (max-width: 640px) {
+        /* For mobile screens, the notifier should occupy full width */
+        .humane, .humane-jackedup {
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        /* For mobile screens let the content in hover-show always be shown */
+        .hover .hover-show {
+            opacity: 1;
+        }
+    }
+
+    @media (min-width: 640px) and(max-width: 786px) {
+        /** For tabs let the message notifier message start at 20% **/
+        .humane, .humane-jackedup {
+            top: 0;
+            width: 60%;
+            left: 20%;
+        }
+    }
+
+    .page-header {
+        margin-top: 20px;
+    }
+</style>

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/jackedup.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="content">
+    <div class="page-header">
+        <h1><b>Import Group</b></h1>
+    </div>
+   <div class="section">
+       <div class=" form-inline center">
+            <form method="post" enctype="multipart/form-data" id="id_import">
+             {% csrf_token %}
+             <div class="form-group">
+		  <input type="file" name="file" id="file" class="btn btn-primary" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                  <small>(Browse file should be only .csv, .xlsx, .xls)</small>
+             </div>
+             <div class="form-group">
+                 <label for="group">Group Name</label>
+                 <input type="text" name="group" id="group" />
+             </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <button type="submit" name="submit" class="btn btn-primary" onClick="return(require());">Import </button>
+                </div>
+            </div>
+       </div>
+    </div>
+</div>  
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="{% static 'js/humane.min.js' %}"></script>
+<script type="text/javascript">
+var gname = $('#group');
+var jacked = humane.create({baseCls: 'humane-jackedup', addnCls: 'humane-jackedup-error'})
+
+{% if request.GET.gname == '1' %}
+    jacked.log("Group name is already exist.");
+{% endif%}
+
+function require(){
+    var name = $('#group').val();
+   
+    if($("#file").val() == '' )
+    {
+      alert("Browse csv/xlsx file");
+      return false;
+    }
+    if(name == ''){
+        alert("Group name required.");
+        return false;
+    }
+    
+
+    $('#id_import').submit();
+    return true;
+}
+        
+</script>
+{% endblock %} 
+
+

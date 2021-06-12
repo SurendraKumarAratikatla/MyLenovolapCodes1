@@ -1,0 +1,1 @@
+message=Dear%20%23field1%23%2C%0AJaya%20Guru%20Datta%0A%0APrasadam%20for%20your%20Seva%20on%20%23field2%23%2C%20could%20not%20be%20delivered%2C%20due%20to%20incorrect%20address.%20Please%20update%20with%20adp%40sgsdatta.org%0A%0AWith%20Best%20Regards%0AIn%20Sadguru%20Seva%0AService%20Team%2C%20SGS%20Ashrama%0AAvadhoota%20Datta%20Peetham.

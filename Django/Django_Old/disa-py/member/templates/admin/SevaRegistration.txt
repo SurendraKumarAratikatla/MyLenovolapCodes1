@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Your Seva is successfully added to ADP Register. 
+Please contact adp@sgsdatta.org, as needed with this ID#{{ssid}}.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham.

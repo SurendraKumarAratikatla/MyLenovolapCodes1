@@ -1,0 +1,91 @@
+{% autoescape on %}
+<script type="text/template" id="addressEditor">
+    <div class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="control-label col-md-3" for="address">Address</label>
+
+            <div class="col-md-9">
+                <textarea class="form-control" rows="3" id="address" name="address"><% if(data.address){ %><%= data.address %><% } %></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3" for="city">City</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="city" name="city" value="<%= data.city %>" autocomplete="off" data-typeahead-url = "/api/cities" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3" for="district">District</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="district" name="district" value="<%= data.district %>" autocomplete="off" data-typeahead-url = "/api/districts">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3" for="state">State</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="state" name="state" value="<%= data.state %>" autocomplete="off" data-typeahead-url = "/api/states">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3" for="country">Country</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="country" name="country" value="<%= data.country %>" autocomplete="off" data-typeahead-url = "/api/countries">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3" for="pincode">Pin Code</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="pincode" name="pin" value="<%= data.pin %>" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-3" for="phone">Phone Number</label>
+
+            <div class="col-md-9">
+                <input class="form-control" type="text" id="phone" name="phone" value="<%= data.phone %>" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="valid" name="valid"
+                        <% if(data.isValid==true) { %>
+                        checked="checked"
+                        <% } %>
+                        > Valid
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="primary" name="primary"
+                        <% if(data.isPrimary==true) { %>
+                        checked="checked"
+                        <% } %>
+                        > Primary
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group section bg-info">
+            <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" name="submit" class="btn btn-primary">Save </button>
+                <button type="button" name="cancel" class="btn btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+</script>
+{% endautoescape %}

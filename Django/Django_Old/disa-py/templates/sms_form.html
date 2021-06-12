@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Send Sms{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="content">
+            <h1>Send SMS</h1>
+            <form action="" method="post" id="id_sms">
+                {% csrf_token %}
+                <tr><th><label for="id_mode">Mode:</label></th>
+                   <td>{{form.mode}}</td></tr><br/>
+                <div id="mobile">
+                    <tr><th><label for="to_number">Enter Mobile Number:</label></th>
+                        <td><input class="form-control" type="text" name="number_list" placeholder="Enter comma separated 10 digit mobile numbers" id="to_number" multiple /></td></tr>
+                </div>
+                <div id="all_numbers">
+                    <tr><th><label for="id_number">All Mobile Number:</label></th>
+                        <td><input class="form-control" type="email" name="number_list" id="numbers_all" multiple readonly/></td></tr>
+                </div>
+                <div id="group_numbers">
+                    <tr><th><label for="id_number">Group Mobile Number:</label></th></tr>
+                    <tr><td><input class="form-control"  multiple readonly/></td></tr>
+                    <tr><th><label for="id_groups">Groups:</label></th>
+                        <td>{{form.groups}}</td></tr>
+                </div>
+                <tr><th><label for="template_msg_preview">Message:</label></th>
+                    <td>{{form.message}}</td></tr>
+
+                <div id="template_msg_preview_count"></div>
+                <br /><br /><br />
+                <div style="text-align:center">
+                    <button  class="default btn btn-primary" onClick="return(Validate());">Send</button>
+					<button class="btn btn-default" type="reset" name="reset">Reset</button>
+               </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script type="text/javascript">
+
+$(function() {
+    $('#to_number').focus();
+
+    if($('form input[type=radio]:checked').val() == "others") {
+         $('#mobile').show();
+         $('#all_numbers').hide(); 
+         $('#group_numbers').hide();
+    }
+
+    $('input:radio[value="others"]').click(function() {  
+         if($(this).is(":checked")) {
+             $('#mobile').show();
+             $('#all_numbers').hide();
+             $('#group_numbers').hide();
+         }
+    });
+
+   
+    $('input:radio[value="group"]').click(function() {
+        if($(this).is(":checked")) { 
+            $('#group_numbers').show();
+            $('#mobile').hide()
+            $('#all_numbers').hide();
+                      
+        }
+    });
+ 
+     $('input:radio[value="all"]').click(function() {
+        if($(this).is(":checked")) {
+            $('#all_numbers').show();
+            $('#mobile').hide();
+            $('#group_numbers').hide();
+          
+        }
+    });
+
+});
+
+function displayVal() {
+    var group_vl = $('#id_groups option:selected').text();
+     $("#group_numbers input").val(group_vl);
+     $("#all_numbers input").val("All")
+}
+$("select").change(displayVal);
+displayVal();
+
+
+$(document).on('keyup', '.data-promotional', function() {
+    var smstext = $('#template_msg_preview').val();
+    var input_chars=smstext.length;
+    var char_per_sms=153;
+     
+    if(isDoubleByte(smstext)) {
+        char_per_sms=63;
+    }
+    
+    var total_sms=Math.ceil(input_chars/char_per_sms);
+    var sms_remainder=input_chars%char_per_sms;
+    
+    if(sms_remainder<8 && sms_remainder>0 && total_sms>1) {
+        total_sms--;
+    }
+    $('#template_msg_preview_count').html( "<p class='text-info'> Approx., Total characters: <strong>" + smstext.length + "</strong> Total SMS: <strong>" + total_sms + "</strong> <span class='glyphicon glyphicon-question-sign' id='limit_help' data-container='body' data-toggle='popover' data-trigger='hover' data-placement='bottom' data-content='Length of the SMS: Single message size constitutes maximum up to 160 characters in case of both GSM & CDMA including the header and footer  which is submitted to SMSC. In case the message is larger than the aforementioned characters, single message shall mean 153 characters for both GSM and CDMA. Please be aware that a single Unicode SMS can only contain a maximum of 70 characters. If a Unicode message is concatenated, it reduces the number of characters contained in each message part by 7.' style='cursor:pointer;'></span>");
+                $('#limit_help').popover();
+});
+
+function isDoubleByte(str) {
+    for (var i = 0, n = str.length; i < n; i++) {
+        if (str.charCodeAt( i ) > 255) { return true; }
+    }
+    return false;
+}
+
+
+function Validate() {
+    
+    var regex = new RegExp("^[0-9,]+$");
+    var mode = $('input[name="mode"]:checked').val();
+    var mobile_input = $('#to_number').val();
+    var numList = mobile_input.split(",");
+    var isValid = regex.test(mobile_input);
+    var msg = $('#template_msg_preview').val();
+
+    if(msg == "") {
+        alert("Please enter message.");
+        return false;
+    }
+    //alert user if any field is empty/incorrect number in others mode
+    if(mode == 'others' && mobile_input == "") {
+        alert("Please Enter Mobile Number.");
+        return false;
+    }
+    if(mode == 'others' && !isValid) {
+        alert("Only numbers and (comma ',') is allowed.");
+        return false;
+    }
+    for(num=0;num<=numList.length;num++) {
+        var len = numList[num].length;
+        
+        if(mode == 'others' && len != 10) {
+            alert("Please check number " + numList[num] + ". Number should be of 10 digits");
+            return false;
+        }
+    }    
+   
+    $('#id_sms').submit();
+    return true;
+}   
+</script>
+{% endblock javascripts %}

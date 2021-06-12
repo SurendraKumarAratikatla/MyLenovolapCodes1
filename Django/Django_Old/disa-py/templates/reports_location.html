@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Location Report</h1>
+        </div>
+        <div class="section">
+            <div class="form-inline center">
+                {% csrf_token %}
+                <input id="location" name="location" type="text" placeholder="Member Location">
+                <button class="btn btn-success" name="get_location" style="margin-left:5px;" onclick="update_location();"> Get Report
+                </button>
+                <span class="loader hide">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <div id="loc-search"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script type="text/javascript">
+function update_location() {
+    $(".loader").removeClass("hide");
+    $.ajax({
+        url: "{% url 'loc-search' %}?loc=" + $('#location').val(),
+        dataType: "html",
+        success: function(result) {
+            $("#loc-search").html(result);
+            $(".loader").addClass("hide");
+        },
+        error: function() {}
+    });
+}
+
+</script>
+{% endblock javascripts %}

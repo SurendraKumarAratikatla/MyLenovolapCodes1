@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+    <div class="page-header">
+        <h1>{% if data.id %} Edit {% else %} Add {% endif %} User</h1>
+    </div>
+    <div class="form-horizontal" role="form">
+        <form method="post">
+            {% csrf_token %}
+        <div class="form-group">
+            <div  class="col-sm-3 col-sm-offset-2">
+                {% if data.id %}
+                <h3>
+                <div  class="label label-info">
+                 User ID# {{data.id}}
+                </div>
+                </h3>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="username">User Name</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="username" id="username" value="{{data.username}}">
+                {% for error in form.username.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+         <div class="form-group">
+            <label class="col-sm-2 control-label required" for="email">Email </label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="email" name="email" id="email" value="{{data.email}}">
+                {% for error in form.email.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required">Enabled </label>
+
+            <div  class="col-sm-3">
+                {% if data.id %}
+                <input type="radio" name="enabled" value=True {% if data.enabled == True %} checked='checked' {% endif %} > Enabled
+                {% else %}
+                <input type="radio" name="enabled" value="True" checked='checked'>Enabled
+                {% endif %}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="enabled" value=False {% if data.enabled == False %} checked='checked' {% endif %}> Disabled
+
+                {% for error in form.enabled.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+<!--        <div class="form-group">
+            <label class="col-sm-2 control-label" for="salt">Salt</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="salt" id="salt" {#% if data.id %} readonly {% endif %} value="{{data.salt#}}">
+            </div>
+        </div>
+-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="password">Password</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="password" {% if data.id %} readonly {%endif%} name="password" id="password" value="{{data.password}}">
+                {% for error in form.password.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="roles">Roles</label>
+
+            <div  class="col-sm-3">
+                <select name="roles" id="roles" class="form-control">
+                    <option value="">--Select roles--</option>
+                    {% if user.roles == 'ROLE_SUPERADMIN' %} 
+                    <option value="ROLE_ADMIN" {% if data.roles == 'ROLE_ADMIN' %} selected='selected' {% endif %} >Admin</option>
+                    <option value="ROLE_SUPERADMIN" {% if data.roles == 'ROLE_SUPERADMIN' %} selected='selected' {% endif %} >Super Admin</option>
+                    {% endif %}
+                    <option value="ROLE_MEMBER" {% if data.roles == 'ROLE_MEMBER' %} selected='selected' {% endif %} >Member</option>
+                    <option value="ROLE_STAFF" {% if data.roles == 'ROLE_STAFF' %} selected='selected' {% endif %}>Staff</option>
+                </select>
+                {% for error in form.roles.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="credentials_expire_at">Credentials Expire At</label>
+            <div  class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="credentials_expire_at" id="credentials_expire_at" {% if data.credentials_expire_at%} value="{{data.credentials_expire_at | cus_datetime | date:"Y-m-d H:i"}}" {%endif%} >
+                    <a class="input-group-addon"><i class="fa fa-calendar"></i></a>
+                </div>
+               <!-- <input class="form-control" type="hidden" name="credential_expire_at">-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="mid">MID</label>
+
+            <div  class="col-sm-3">
+                <select name="mid" id="mid" class="form-control">
+                    <option value="">--Select mid--</option>
+                    {% for m in member %}
+                    <option value="{{m.id}}" {% if data.mid == m.id %} selected='selected' {% endif %} >MID#{{m.mid}}-{{m.name}}</option>
+                    {% endfor %}
+                </select>
+                {% for error in form.mid.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="googleid">GoogleId</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Google ID" name="googleid" id="googleid" {%if data.googleid %} value="{{data.googleid}} {%endif%}">
+            </div>
+            {% for error in form.googleid.errors %}
+                 <span class="help-inline text-danger">{{ error }}</span>
+            {% endfor %}
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="googleaccesstoken">GoogleAccessToken</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" {% if data.googleaccesstoken %} value="{{data.googleaccesstoken}}" {% endif %} placeholder="GoogleAccessToken" name="googleaccesstoken" id="googleaccesstoken">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="facebookid">FacebookId</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" {% if data.facebookid %} value="{{data.facebookid}}" {%endif%} placeholder="Facebook ID" name="facebookid"  id="facebookid" >
+            </div>
+            {% for error in form.facebookid.errors %}
+                <span class="help-inline text-danger">{{ error }}</span>
+            {% endfor %}
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="facebookaccesstoken">FacebookAccessToken</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" placeholder="FaceBookAccessToken" name="facebookaccesstoken" id="facebookaccesstoken" {%if data.facebookaccesstoken %} value="{{data.facebookaccesstoken}}" {% endif %}>
+            </div>
+        </div>
+        <div class="form-group section bg-info">
+            <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" name="submit"
+                        class="btn btn-primary">Save
+                </button>
+                 <a href="{% url 'user-access' %}" class="btn btn-default">Cancel</a>   
+            </div>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery.simple-dtpicker.js' %}"></script>
+<link type="text/css" href="{% static 'css/jquery.simple-dtpicker.css' %}" rel="stylesheet" />
+<script type="text/javascript">
+
+$(function(){			
+
+    $('*[name=credentials_expire_at]').appendDtpicker().on('changeDate', function(ev){
+       $(this).datepicker('hide');
+	//inline: true,
+        //autoclose: true,
+	//current: "2012-3-4 12:30"
+     });
+});
+
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,410 @@
+{% extends "member/layout.html" %}
+
+{% block stylesheets %}
+    {{ block.super }}
+
+    {% load compress %}
+    {% load static from staticfiles %}
+    {% compress css %}
+    <link rel="stylesheet" href='{% static "css/vendor/valums-file-uploader/fileuploader.css" %}' type="text/css" charset="utf-8">
+    <link rel="stylesheet" href='{% static "css/fileuploader.bp.css" %}' type="text/css" charset="utf-8">
+    <link rel="stylesheet" href='{% static "member/css/member.css" %}' type="text/css" charset="utf-8">
+    {% endcompress css %}
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ block.super }}
+    {% load compress %}
+    {% load static from staticfiles %}
+    {% compress js %}
+    <script src='{% static "js/vendor/backbone.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "js/backbone.bp.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "js/backbone/view/item.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "js/backbone/view/form.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "js/vendor/valums-file-uploader/client/fileuploader.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "js/fileuploader.bp.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "js/backbone/models/commonModels.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "organisation/js/backbone/models/organisation.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "seva/js/backbone/models/SevaCategory/sevaCategory.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "seva/js/backbone/models/Seva/seva.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "member/js/backbone/models/member.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/models/address.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberSearch.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberDetailsContainer.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberDetails.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberEditor.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberTile.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/memberSummaryTile.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "member/js/backbone/views/Address/addressContainer.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/Address/addressEditor.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "member/js/backbone/views/Address/addressTile.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "member/js/backbone/views/award/awardTile.js" %}' type="text/javascript" charset="utf-8"></script>
+
+    <script src='{% static "seva/js/backbone/views/Seva/sevaDetailsTile.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "seva/js/backbone/views/Seva/sevaDetailsCollectionContainer.js" %}' type="text/javascript" charset="utf-8"></script>
+    <script src='{% static "seva/js/backbone/views/Seva/sevaDetailsEditor.js" %}' type="text/javascript" charset="utf-8"></script>
+    {% endcompress js %}
+
+    {% include 'member/Member/_memberSearch.html' %}
+    {% include 'member/Member/_memberDetails.html' %}
+    {% include 'member/Member/_memberTile.html' %}
+    {% include 'member/Member/_memberEditor.html' %}
+    {% include 'member/Member/_memberSummaryTile.html' %}
+
+    {% include 'member/Address/_addressContainer.html' %}
+    {% include 'member/Address/_addressTile.html' %}
+    {% include 'member/Address/_addressEditor.html' %}
+
+    {% include 'member/award/_awardTile.html' %}
+
+    {% include 'seva/Seva/_sevaDetailsCollection.html' %}
+    {% include 'seva/Seva/_sevaDetailsEditor.html' %}
+
+    {% compress js %}
+    <script type="text/javascript">
+    // Backbone app
+    var app;
+
+    var AppRouter = Backbone.Router.extend({
+        collection: null,
+        sevaCategoryCollection: null,
+        nakshatramCollection: null,
+        organisationCollection: null,
+
+        routes: {
+            '': 'membersHome',
+            ':memberId/sevas/new': 'addSeva',
+            ':id/sevas/:sevaId': 'memberDetails',
+            ':memberId/addresses/new': 'editMemberAddress',
+            ':memberId/addresses/:id/edit': 'editMemberAddress',
+            'new/add': 'editMember',
+            ':id/edit': 'editMember',
+            ':id': 'memberDetails'
+        },
+
+        initialize: function (options) {
+            _.bindAll(this);
+            this.collection = options.collection;
+            this.sevaCategoryCollection = options.sevaCategoryCollection;
+            this.nakshatramCollection = options.nakshatramCollection;
+            this.organisationCollection = options.organisationCollection;
+        },
+        membersHome: function () {
+            this.navigate('');
+            var view = new MemberSearchView({
+                collection: app.collection
+            });
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        /**
+         * To display member details
+         * @param {Member|string} model   Member model whose details are to seen or the id
+         * @param {string}        sevaId  Selected seva Id that needs to be highlighted
+         */
+        memberDetails: function (model, sevaId) {
+            if (!_.isObject(model)) {
+                // Passed argument is a string and not a model. Get the model from the collection
+                id = model;
+                // Seva model does not exist. Fetch it
+                model = new Member({'id': id});
+                model.fetch({
+                    error: function () {
+                        notify.error('Member with specified id does not exist');
+                    },
+                    data: {
+                        profile: 1,
+                        addresses: 1,
+                        subscriptions: 1
+                    },
+                    parse: true
+                });
+            }
+
+            var navigate = model.id;
+            if (sevaId) {
+                navigate += '/sevas/' + sevaId;
+            }
+            this.navigate(navigate);
+
+            var view = new MemberDetailsContainerView({
+                model: model,
+                selected: sevaId
+            });
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        /**
+         * Edit | Add member
+         * @param {Member} model Member model for edit or add member
+         */
+        editMember: function (model) {
+            if (!_.isObject(model)) {
+                // Passed argument is not a model
+                if (!model) {
+                    // model is not a string. Add new model
+                    model = new Member();
+                    this.navigate('new/add');
+                }
+                else {
+                    // model is a string. Fetch the model from the server
+                    var id = model;
+                    model = new Member({'id': id});
+                    model.fetch({
+                        error: function () {
+                            notify.error('Member with specified id does not exist');
+                        },
+                        data: {
+                            profile: 1,
+                            addresses: 1,
+                            subscriptions: 1
+                        },
+                        parse: true
+                    });
+                    this.navigate(model.id + '/edit');
+                }
+            }
+            else {
+                // model exists. Edit member
+                this.navigate(model.id + '/edit');
+            }
+
+            // Previous page cookie is set. Create success and cancel callback for member editor
+            var prevPage = readCookie('previousPage');
+            var cancel, success;
+            if (prevPage) {
+                eraseCookie('previousPage');
+                cancel = function () {
+                    // redirect to the previous page
+                    window.location.href = prevPage;
+                };
+                success = cancel;
+            }
+
+            var view = new MemberEditorView({
+                model: model,
+                success: success ? success : null,
+                cancel: cancel ? cancel : null
+
+            });
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        // For display edit profile template
+        editProfile: function (id) {
+            var model = app.collection.get(id);
+            var view = new EditProfileView({
+                model: model
+            });
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        /**
+         * Add seva for member
+         * @param {Member} member
+         */
+        addSeva: function (member) {
+            var id;
+            if (!_.isObject(member)) {
+                // Passed argument is a string and not a model. Get the model
+                id = member;
+                // Fetch it
+                member = new Member({'id': id});
+                member.fetch({
+                    error: function () {
+                        notify.error('Member with specified id does not exist');
+                    },
+                    data: {
+                        profile: 1,
+                        addresses: 1,
+                        subscriptions: 1
+                    },
+                    parse: true
+                });
+            }
+
+            // Adding new seva
+            this.navigate(member.id + '/sevas/new');
+            var model = new Seva();
+
+            var self = this;
+            var view = new SevaDetailsEditorView({
+                model: model,
+                member: member,
+                success: function () {
+                    // Refresh the member detail page after addition, this is for the new seva to appear in
+                    // the page
+                    self.navigate(member.id, {'trigger': true});
+                },
+                cancel: function () {
+                    self.memberDetails(member);
+                }
+            });
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        /**
+         * Edit seva for an existing member
+         * @param {Seva|null}    seva    Seva that is to be edited
+         */
+        editSeva: function (seva) {
+            if (seva && seva.id) {
+                // Seva already has id. Edit seva
+                // Edit Seva is in a different app. To come back to the current page after success or cancel, we save the
+                // current url in a cookie. So the sevas app uses the cookie for redirecting after success or cancel.
+                createCookie('previousPage', window.location.pathname + window.location.search + window.location.hash, 1);
+                // redirect to the seva edit page
+                window.location.href = '/admin/sevas#' + seva.id + '/edit';
+            }
+        },
+
+        /**
+         * Edit | Add address for an existing member
+         * @param {Member|string}   member         Member model along with addresses Or member id
+         * @param {string}         addressId      Specifies address id. If address is not exist then passing id value is "new"
+         */
+        editMemberAddress: function (member, addressId) {
+            // if address id is not specified treat it as new.
+            addressId = addressId || "new";
+
+            var memberId = null;
+
+            if (!_.isObject(member)) {
+                // Passed argument for member is not a model. Its a member Id
+                // Instantiate a new Member with passed id and fetch it.
+                var memberId = member;
+                member = new Member({'id': memberId});
+                member.fetch({
+                    error: function () {
+                        notify.error('Member with specified id does not exist');
+                    },
+                    data: {
+                        profile: 1,
+                        addresses: 1,
+                        subscriptions: 1
+                    },
+                    parse: true
+                });
+            } else {
+                // Passed argument for member is a model.
+                memberId = member.id;
+            }
+
+            var model = null;
+            if (addressId == 'new') {
+                // New address is being added. Create an empty address model
+                model = new Address();
+                this.navigate(memberId + '/addresses/' + addressId);
+            } else {
+                this.navigate(memberId + '/addresses/' + addressId + '/edit');
+                // Existing address is being edited. Get the address from the member model
+                // It is possible that the Member model is still fetching and address does not exist.
+                var addresses = member.get('addresses');
+                if (addresses) {
+                    // Member model has addresses. Get the related address model
+                    model = member.get('addresses').get(addressId);
+                } else {
+                    // Member model does not exist yet. create a dummy address model with id set
+                    model = new Address({id: addressId});
+                }
+            }
+
+
+            var view = new AddressContainerView({
+                model: model,
+                member: member
+            });
+
+            $('.content').empty().append(view.el);
+            view.render();
+        },
+
+        /**
+         * Edit | Add award for an existing member
+         * @param {string}   memberId         Member model
+         * @param {string}   awardId      'new' Or id of the award to be edited
+         */
+        editMemberAward: function (memberId, awardId) {
+            // if address id is not specified treat it as new.
+            awardId = awardId || "new";
+
+            var member = new Member({'id': memberId});
+            member.fetch({
+                error: function () {
+                    notify.error('Member with specified id does not exist');
+                },
+                data: {
+                    profile: 1,
+                    addresses: 1,
+                    subscriptions: 1
+                },
+                parse: true
+            });
+
+
+            var model = null;
+            if (awardId == 'new') {
+                // New award is being added. Create an empty address model
+                model = new Award();
+                this.navigate(memberId + '/awards/new');
+            } else {
+                this.navigate(memberId + '/addresses/' + awardId + '/edit');
+                model = new Award({'id': awardId});
+                model.fetch({
+                    error: function () {
+                        notify.error('Award with specified id does not exist');
+                    },
+                    parse: true
+                });
+            }
+
+
+            var view = new AddressContainerView({
+                model: model,
+                member: member
+            });
+
+            $('.content').empty().append(view.el);
+            view.render();
+        }
+    });
+
+    $(document).ready(function () {
+        app = new AppRouter({
+            collection: new MemberCollection(),
+            sevaCategoryCollection: new SevaCategoryCollection(appData.sevaCategoryCollection),
+            nakshatramCollection: new NakshatramCollection(appData.nakshatramCollection),
+            organisationCollection: new OrganisationCollection(appData.organisationCollection)
+        });
+        Backbone.history.start();
+    });
+
+
+    </script>
+    {% endcompress js %}
+{% endblock %}
+
+{% block content %}
+    {% autoescape off %}
+    <script type="application/javascript">
+        var appData = {
+            sevaCategoryCollection: JSON.parse('{{ seva_category_collection }}'),
+            nakshatramCollection: JSON.parse('{{ nakshatram_collection }}'),
+            organisationCollection: JSON.parse('{{ organisation_collection }}')
+        };
+    </script>
+    {% endautoescape %}
+    <div class="content">
+    </div>
+{% endblock %}

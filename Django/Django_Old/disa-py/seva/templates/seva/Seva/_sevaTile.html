@@ -1,0 +1,124 @@
+{% autoescape on %}
+<script type="text/template" id="sevaTileTpl">
+
+    <td style="width:100px;">
+        <div>
+            <img src=" <% if(data.member.photo) { %> <%= data.member.photo %> <%}else{ %>/img/user.jpg<%}%>"
+                 width="100px"
+                 height="100px" alt="image" class="member-details-view details"
+                 title="See member details."/></div>
+    </td>
+    <td>
+        <div><span><%=data.member.mid%></span>, <span><%=data.ssid %></span></div>
+
+        <div title="Click to see member details" class="donor-name member-details">
+            <% if(data.member.salutation){ %><%=data.member.salutation%><%}else{ %>Sri<% } %>
+            <%=data.member.name%> <%=data.member.surname%>
+        </div>
+    </td>
+
+    <td style="position:relative;">
+        <% if(data.member.place && data.member.place!=''){ %>
+        <i class="icon-map-marker" style="position:absolute;top:10px;left:-5px;" title="Place"></i>
+        <span style="text-transform:capitalize;" title="Place"><%=data.member.place%></span>
+        <% } %>
+    </td>
+
+    <td style="width:200px;">
+        <% if(data.inTheNameOf=='donor' || data.inTheNameOf == 'Donor'){ %>
+        <div>
+            <% if(data.member.salutation){ %><%=data.member.salutation%><%}else{ %>Sri<% } %>
+            <%=data.member.name%> <%=data.member.surname%>
+        </div>
+
+        <% if(data.member.gotram){ %>
+        <div class="muted" style="text-transform:capitalize;">
+            <span title="Gotram"><i class="icon-anchor"></i> <%= data.member.gotram%></span>
+        </div>
+        <% } %>
+
+        <% if(data.member.nakshatram){%>
+        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> <%=data.member.nakshatram%></span></div>
+        <%}%>
+
+        <% }else{ %>
+        <div style="text-transform:capitalize;"><%=data.inTheNameOf%></div>
+        <% if(data.gotram){ %>
+        <div class="muted" style="text-transform:capitalize;">
+            <span title="Gotram"><i class="icon-anchor"></i> <%= data.gotram%></span>
+        </div>
+        <% } %>
+        <% if (data.nakshatram) { %>
+        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> <%= data.nakshatram %></span></div>
+        <% } %>
+        <% } %>
+
+        <% if(data.occasion) { %>
+        <div class="muted" style="text-transform:capitalize;"><span title="Occasion"><i class="icon-gift"></i> <%= data.occasion %></span></div>
+        <% } %>
+    </td>
+
+    <td>
+        <%= data.sevaDate %>
+    </td>
+    <td class="muted" style="width:300px;">
+        <% if(data.inTheNameOf!='donor' && data.sevaAddress && data.isValid ){ %>
+        <div><%= data.sevaAddress.address %></div>
+        <div><%= data.sevaAddress.city %></div>
+        <div><%= data.sevaAddress.state %></div>
+        <div><%= data.sevaAddress.country %></div>
+        <div><%= data.sevaAddress.pin %></div>
+
+        <% }else{ %>
+
+        <% _.each(data.member.addresses,function(address) { %>
+
+        <% if(address.isValid) { %>
+            <% if(address.isPrimary ) { %>
+            <div><%=address.address %></div>
+            <div><% if(address.city) { %><%=address.city %>, <% } %>
+                <% if(address.district) { %><%=address.district %>, <% } %>
+                <% if(address.state) { %><%=address.state %>,<% } %>
+            </div>
+            <div><% if(address.country) { %><%=address.country %> <% } %>
+                <% if(address.pin) { %><%=address.pin %><% } %>
+            </div>
+            <% } %>
+        <% }else{ %>
+            <div style="background-color: red">
+                <div><%=address.address %></div>
+                <div><% if(address.city) { %><%=address.city %>, <% } %>
+                    <% if(address.district) { %><%=address.district %>, <% } %>
+                    <% if(address.state) { %><%=address.state %>,<% } %>
+                </div>
+                <div><% if(address.country) { %><%=address.country %> <% } %>
+                    <% if(address.pin) { %><%=address.pin %><% } %>
+                </div>
+            </div>
+        <% } %>
+
+        <% }); %>
+
+        <div style="margin-top:5px;">
+        <% if(data.member.email && data.member.email!='') { %>
+        <span title="Email"><i class="icon-envelope"></i> <%= data.member.email%></span>
+        <% } %>
+        </div>
+        <div>
+        <% if(data.member.phone && data.member.phone!='') { %>
+        <span style="margin-right:10px;" title="Phone"><i class="icon-phone"> </i><%= data.member.phone%></span>
+        <% } %>
+        <% if(data.member.mobile && data.member.mobile!='') { %>
+        <span title="Mobile"><i class="icon-mobile-phone"> </i><%= data.member.mobile%></span>
+        <% } %>
+        </div>
+        <% } %>
+    </td>
+    <td class="seva-tile-actions" style="width:60px;">
+        <div class="seva-tile-actions-list details">
+            <i class="icon-eye-open seva-details pull-left" style="position:relative;top:2px;"></i>
+            <small><a>Details</a></small>
+        </div>
+    </td>
+</script>
+{% endautoescape %}

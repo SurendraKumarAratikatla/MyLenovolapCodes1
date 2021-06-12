@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Your Shashwata Seva will be performed at Datta Peetham on {{date}}.
+You are welcome to attend.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham.

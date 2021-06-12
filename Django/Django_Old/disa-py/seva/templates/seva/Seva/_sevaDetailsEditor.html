@@ -1,0 +1,353 @@
+{% autoescape on %}
+<script type="text/template" id="sevaDetailsEditorTpl">
+    <div class="page-header">
+        <h1><% if(data.id) { %>Edit<% } else { %>Add<% } %> Seva</h1>
+    </div>
+
+    <div class="row section">
+        <div class="col-md-5 pull-right" style=" margin-bottom: 20px;">
+            <div class="member-summary"></div>
+        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="form-horizontal">
+                <% if(data.id) { %>
+                <div class="form-group">
+                    <div class="col-md-6 col-md-offset-3">
+                        <span class="label-info label"><%= data.ssid %></span>
+                    </div>
+                </div>
+                <% } %>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-3 required" for="organisation">Organisation</label>
+                    <div class="col-md-6">
+                        <select class="form-control" id="organisation" name="organisation">
+                            <option value="">--Select Organisation-- </option>
+                            <% _.each(data.organisationColl,function(organisation){ %>
+                            <option value="<%= organisation.id %>"
+                                    <% if(data.id) { %>
+                                    <% if(data.organisation.id==organisation.id){ %> selected='selected'<% } %>
+                                    <% } %>
+                                    > <%= organisation.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3 required" for="sevaCategory">Seva Category</label>
+                    <div class="col-md-6">
+                        <select class="form-control" id="sevaCategory" name="sevaCategory">
+                            <option value="">--Select Seva Category-- </option>
+                            <% _.each(data.sevaCategoryColl,function(sevaCategory) { %>
+                            <option value="<%= sevaCategory.id %>"
+                                    <% if(data.id) { %>
+                                    <% if(data.sevaCategory.id==sevaCategory.id) { %> selected='selected'<% } %>
+                                    <% } %>
+                                    >
+                                <%= sevaCategory.location %> &rarr; <%= sevaCategory.name%>
+                            </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="form-group">-->
+                    <!--<label class="control-label col-md-3" for="sevaDate">Seva Date</label>-->
+                    <!--<div class="col-md-6">-->
+                        <!--<input class="form-control" type="text" id="sevaDate" name="sevaDateInput" readonly="readonly">-->
+                        <!--<input class="form-control" type="hidden" name="sevaDate">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="startDate">Seva Start Date</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="startDate" name="startDateInput" readonly="readonly">
+                        <input type="hidden" name="startDate">
+                        <div id="seva_date_summary"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">In The Name of</label>
+                    <div class="col-md-6" style="margin-left: 30px;">
+                        <label class="radio inline">
+                            <input type="radio" value="donor" name="inTheNameOf"
+                            <% if(!data.id) { %>checked="checked" <% }else if(data.inTheNameOf=='donor' | data.inTheNameOf == 'Donor'){ %>checked='checked'<% } %>
+                            > Donor
+                        </label>
+                        <label class="radio">
+                            <input type="radio" value="other" name="inTheNameOf" <% if(data.inTheNameOf!='donor' && data.inTheNameOf!='Donor' && data.id){ %>checked='checked'<% } %> > Other
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="name">Name</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="name" name="name" class="other"
+                        <% if (data.inTheNameOf =='donor' || !data.id){%>
+                            value="<%= data.member.name %>" disabled="disabled"
+                        <% }
+                        else
+                        { %>
+                            value="<%= data.inTheNameOf %>"
+                        <%}
+                        %>
+                        >
+                    </div>
+                </div>
+
+                <!--<div class="form-group">-->
+                    <!--<label class="control-label col-md-3" for="endDate">End Date</label>-->
+                    <!--<div class="col-md-6">-->
+                        <!--<input class="form-control" type="text" id="endDate" name="endDateInput" readonly="readonly">-->
+                        <!--<input class="form-control" type="hidden" id="endDateHidden" name="endDate">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="gotram">Gotram</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" name="gotram" id="gotram" class="other"
+                        <%
+                         if (data.inTheNameOf=='donor' || !data.id)
+                         {
+                            if (data.member.gotram && data.member.gotram != '' ){%>
+                                value = "<%= data.member.gotram %>" disabled="disabled"
+                            <%}
+                         }
+                        else
+                        {%>
+                            value = "<%= data.gotram %>"
+                        <%}
+                         %> >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="nakshatram">Nakshatram</label>
+                    <div class="col-md-6">
+                        <select class="form-control" style="text-transform:capitalize;" id="nakshatram" name="nakshatram" class="other"
+                                <% if (data.inTheNameOf=='donor' || !data.id){
+                                    if (data.member.nakshatram){%>
+                                    disabled = "disabled"
+                                    <%}}%> >
+                            <option>--Select Nakshatram--</option>
+                            <% _.each(data.nakshatramColl,function(nakshatram) { %>
+                            <option  value="<%= nakshatram.nakshatram %>"
+                                    <% if(data.inTheNameOf=='donor' || !data.id) { %>
+                                        <% if(data.member.nakshatram==nakshatram.nakshatram){ %>selected="selected"<% } %>
+                                    <% }else{ %>
+                                        <% if(data.nakshatram==nakshatram.nakshatram){ %>selected="selected" <% } %>
+                                    <% } %>
+                                    ><%= nakshatram.nakshatram %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="occasion">Occasion</label>
+                    <div class="col-md-6">
+                        <input class="form-control" type="text" id="occasion" name="occasion" value="<%= data.occasion %>">
+                    </div>
+                </div>
+
+                <div class="seva-address <% if (data.inTheNameOf=='donor' | data.inTheNameOf=='Donor'){ %>hide<% } %>" >
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="address">Address</label>
+
+                        <div class="col-md-6">
+                            <textarea class="form-control" rows="3" id="address" name="address"><% if(data.sevaAddress) { %><%= data.sevaAddress.address%><% } %></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="city">City</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="city" name="city"
+                                   <% if(data.sevaAddress) { %>
+                                    value="<%= data.sevaAddress.city%>"
+                                    <% } %>
+                                   >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="district">District</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="district" name="district"
+                            <% if(data.sevaAddress) { %>
+                            value="<%= data.sevaAddress.district%>"
+                            <% } %>
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="state">State</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="state" name="state"
+                            <% if(data.sevaAddress) { %>
+                            value="<%= data.sevaAddress.state%>"
+                            <% } %>
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="country">Country</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="country" name="country"
+                            <% if(data.sevaAddress) { %>
+                            value="<%= data.sevaAddress.country %>"
+                            <% } %>
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="pincode">Pin Code</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="pincode" name="pin"
+                            <% if(data.sevaAddress) { %>
+                            value="<%= data.sevaAddress.pin%>"
+                            <% } %>
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="phone">Phone Number</label>
+
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="phone" name="phone"
+                            <% if(data.sevaAddress) { %>
+                            value="<%= data.sevaAddress.phone%>"
+                            <% } %>
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transaction hide">
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="amount">Total Amount</label>
+                        <div class="col-md-6">
+                            <div class="input class="form-control"-prepend">
+                                <span class="add-on"><i class="icon-rupee"></i></span>
+                                <input class="form-control" type="text" class="span12" id="totalAmount" name="totalAmount" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 required">Transaction Type</label>
+                        <div class="col-md-6">
+                            <label class="radio inline">
+                                <input type="radio" value="cash" name="transactionType" checked> Cash
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <label class="radio inline">
+                                <input type="radio" value="check" name="transactionType"> Check
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group check-number hide">
+                        <label class="control-label col-md-3 required" for="checkNumber">Check Number</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="checkNumber" name="checkNumber">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 required" for="amountPay">Paying Amount</label>
+                        <div class="col-md-6">
+                            <div class="input class="form-control"-prepend">
+                                <span class="add-on"><i class="icon-rupee"></i></span>
+                                <input class="form-control" type="text" class="span12" id="amountPay" name="amountPay">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="amountDau">Due Amount</label>
+                        <div class="col-md-6">
+                            <div class="input class="form-control"-prepend">
+                                <span class="add-on"><i class="icon-rupee"></i></span>
+                                <input class="form-control" type="text" class="span12" id="amountDau" name="amountDau" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 required" for="receptNumber">Recept Number</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="receptNumber" name="receptNumber">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <span class="btn btn-info form-control" id="sponsor-item-option">Sponsor Item</span></label>
+                    </div>
+                </div>
+
+                <div class="sponsor-item-properties hide">
+                    <input type="hidden" name="sponsorItemOption" value=false/>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="itemName">Item Name</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="itemName" name="itemName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="itemCode">Item Code</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="itemCode" name="itemCode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="itemType">Item Type</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="itemType" name="itemType" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="itemAmount">Item Amount</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="itemAmount" name="itemAmount">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3" for="itemDescription">Description</label>
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" id="itemDescription" name="itemDescription">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="span12">
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="cancel btn">Cancel</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="sevaAddressTpl">
+</script>
+{% endautoescape %}

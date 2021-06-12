@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<table class="table sevas" border="0" width="100%">
+    <thead>
+    <tr>
+        <th><i class="icon-user"></i> Name</th>
+        <th><i class="icon-map-marker"></i> Place</th>
+        <th><i class="icon-envelope"></i> Email</th>
+        <th><i class="fa fa-mobile"></i> Mobile
+        <span class="pull-right">
+            <a href="{% url 'export-loc-search' %}?loc={{loc}}" class="btn btn-primary btn-mini" name="export" ><i class="icon-download-alt"></i> &nbsp;Export</a>
+        </span>
+        </th>
+    </tr>
+    </thead>
+    <tbody class="member-collection">
+    {% for mem in loc_list %}
+        <tr class="member-location">
+            <td> {{ mem.name }}</td>
+            <td> {{ mem.place }}</td>
+            <td> {{ mem.email }}</td>
+            <td> {{ mem.phone }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

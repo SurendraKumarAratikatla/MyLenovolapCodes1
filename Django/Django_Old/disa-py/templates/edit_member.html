@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+    <div class="page-header">
+        <h1>{% if data.id %} Edit {% else %} Add {% endif %} Member</h1>
+    </div>
+    <div class="form-horizontal" role="form">
+        <form method="post">
+            {% csrf_token %}
+        <div class="form-group">
+            <div  class="col-sm-3 col-sm-offset-2">
+                {% if data.id %}
+                <h3>
+                <div  class="label label-info">
+                    MID#{{ data.mid }}
+                </div>
+                </h3>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="salutation">Salutation</label>
+
+            <div  class="col-sm-3">
+                <select name="salutation" id="salutation" class="form-control">
+                    <option value="">--Select salutation--</option>
+                    <option value="Dr" {% if data.salutation == 'Dr' %} selected='selected' {% endif %} >Dr</option>
+                    <option value="Mr" {% if data.salutation == 'Mr' %} selected='selected' {% endif %} >Mr</option>
+                    <option value="Ms" {% if data.salutation == 'Ms' %} selected='selected' {% endif %}>Ms</option>
+                    <option value="Mrs" {% if data.salutation == 'Mrs' %} selected='selected' {% endif %} >Mrs</option>
+                    <option value="Sri" {% if data.salutation == 'Sri' %} selected='selected' {% endif %}>Sri</option>
+                    <option value="Smt" {% if data.salutation == 'Smt' %} selected='selected' {% endif %} >Smt</option>
+                    <option value="Mssrs" {% if data.salutation == 'Mssrs' %} selected='selected' {% endif %} >Mssrs</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="surname">Sur Name</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="surname" id="surname" value="{{data.surname}}">
+                {% for error in form.surname.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="name">Name</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="name" id="name" value="{{data.name }}">
+                {% for error in form.name.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="place">Place</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="place" id="place" value="{{data.place }}">
+                {% for error in form.place.errors %}
+                    <span class="help-inline text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="email">E-Mail</label>
+
+            <div  class="col-sm-3">
+                {% if data.id and user|can:'VIEW_SELF_DETAILS' %}
+                <input class="form-control" type="text" readonly placeholder="Mail Id" name="email" id="email" value="{{data.email}}">
+                {% else %}
+                <input class="form-control" type="text" placeholder="Mail Id" name="email" id="email" value="{{data.email}}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="mobile">Mobile</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="mobile" id="mobile" value="{{data.mobile }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="phone">Phone</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="phone" id="phone" value="{{data.phone}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="calendar_type">Calendar_type</label>
+
+            <div  class="col-sm-3">
+                <input type="radio" name="calendar_type" value="lunar" {% if data.calendar_type == 'lunar' %} checked='checked' {% endif %}> Lunar
+                <input type="radio" name="calendar_type" value="solar" {% if data.calendar_type == 'solar' %} checked='checked' {% endif %}> Solar
+                {% if data.id %} 
+                <input type="radio" name="calendar_type" value="default" {% if data.calendar_type == 'default' %}  checked='checked' {% endif %}>Default
+               {% else %}
+               <input type="radio" name="calendar_type" value="default" checked='checked'>Default
+               {% endif %}
+            </div>
+        </div>
+        <div id="id_maasam">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="maasam">Maasam</label>
+
+            <div  class="col-sm-3">
+                <select name="maasam" id="maasam" class="form-control">
+                    <option value="">--Select Maasam--</option>
+                    {% for m in maasam %}
+                    <option value="{{m.maasam}}" {% if m.maasam|lower == data.maasam|lower %} selected='selected' {% endif %}>{{m.maasam|capfirst}}</option>
+                    {% endfor %}
+                </select>
+               </div>
+           </div>
+        </div>
+       <div id="id_paksham">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="paksham">Paksham</label>
+
+            <div  class="col-sm-3">
+                <select name="paksham" id="paksham" class="form-control">
+                    <option value="">--Select Paksham--</option>
+                    {% for paks in paksham %}
+                    <option value="{{paks.paksham}}" {% if paks.paksham|lower == data.paksham|lower %} selected='selected' {% endif %}>{{paks.paksham|capfirst}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+           </div>
+        </div>
+        <div id="id_tithi">   
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="maasam">Tithi</label>
+
+            <div  class="col-sm-3">
+                <select name="tithi" id="tithi" class="form-control">
+                    <option value="">--Select Tithi--</option>
+                    {% for t in tithi %}
+                    <option value="{{t.tithi}}" {% if t.tithi|lower == data.tithi|lower %} selected='selected' {% endif %}>{{t.tithi|capfirst}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+           </div>
+        </div>
+        <div id="id_rasi">    
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="rasi">Rasi</label>
+            <div  class="col-sm-3">
+                <select name="rasi" id="rasi" class="form-control">
+                    <option value="">--Select Rasi--</option>
+                    {% for r in rasi %}
+                    <option value="{{r.rasi}}" {% if r.rasi|lower == data.rasi|lower %} selected='selected' {% endif %}>{{r.rasi|capfirst}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+           </div>
+        </div>
+        <div id="id_nakshatram">    
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="nakshatram">Nakshatram</label>
+            <div  class="col-sm-3">
+                <select name="nakshatram" id="nakshatram" style="text-transform:capitalize;" class="form-control">
+                    <option value="">--Select Nakshatram--</option>
+                    {% for nak in nakshatrams %}
+                    <option value="{{nak.nakshatram}}" {% if nak.nakshatram|lower == data.nakshatram|lower %} selected='selected' {% endif %} >{{nak.nakshatram}}</option>
+                    {% endfor %}
+
+                </select>
+              </div>
+            </div>
+        </div>
+       <div id="id_dob">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="dob">Date Of Birth</label>
+            <div  class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="dob" id="dob" value="{{data.dob | cus_date | date:"d F, Y"}}">
+                    <a class="input-group-addon"><i class="fa fa-calendar"></i></a>
+                </div>
+                <input class="form-control" type="hidden" name="birthDate">
+            </div>
+        </div>
+       </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="gotram">Gotram</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="gotram" id="gotram" placeholder="Gotram" value="{{data.gotram }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="gender">Gender</label>
+
+            <div  class="col-sm-3">
+                <input type="radio" name="gender" value="m" {% if data.gender == 'm' %} checked='checked' {% endif %}> Male
+                <input type="radio" name="gender" value="f" {% if data.gender == 'f' %} checked='checked' {% endif %}> Female
+                {% if data.id %}
+                <input type="radio" name="gender" value="d" {% if data.gender == 'd' %} checked='checked'{% endif %}> Data Not Available
+                {% else %}
+                <input type="radio" name="gender" value="d" checked='checked'> Data Not Available
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group section bg-info">
+            <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" name="submit"
+                        class="btn btn-primary">Save
+                </button>
+                 {% if user|can:'VIEW_MEMBER_DETAILS' %}
+                 <a href="{% if data %} {% url 'member-view' data.id %} {% else %} {% url 'members' %} {% endif %}" class="btn btn-default">Cancel</a>
+                 {% elif user|can:'VIEW_SELF_DETAILS' %}
+                 <a href="{% if data %} {% url 'profile-view' %} {% else %}{% url 'members' %} {% endif %}" class="btn btn-default">Cancel</a> 
+                 {% endif %}
+            </div>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+    var year = (new Date).getFullYear();
+        $("input[name='dob']").datepicker({
+            dateFormat: "d MM, yy",
+            altFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "1930:" + year
+            //altField: "input[name='birthDate']"
+        });
+    $("#id_maasam, #id_paksham, #id_tithi, #id_nakshatram, #id_rasi").hide();
+
+    if($('form input[type=radio]:checked').val() == "lunar") {
+        $('#id_maasam').show(); 
+        $('#id_paksham').show();
+        $('#id_tithi').show();
+        $('#id_rasi').hide(); 
+        $('#id_nakshatram').hide();
+        $('#id_dob').hide();
+    }
+                
+    if($('form input[type=radio]:checked').val() == "solar") {
+        $('#id_rasi').show();
+        $('#id_nakshatram').show();
+        $('#id_tithi').show();
+        $('#id_maasam').hide();
+        $('#id_paksham').hide();
+        $('#id_dob').hide();
+    }
+
+
+    if($('form input[type=radio]:checked').val() == "default") {
+         $('#id_dob').show();
+         $('#id_maasam').hide(); 
+         $('#id_paksham').hide(); 
+         $('#id_tithi').hide(); 
+         $('#id_rasi').hide();
+	 $('#id_nakshatram').hide();
+    }
+  
+    $('input:radio[value="default"]').click(function() {  
+         if($(this).is(":checked")) {
+             $('#id_dob').show();
+             $('#id_maasam').hide();
+             $('#id_paksham').hide();
+             $('#id_tithi').hide();
+             $('#id_rasi').hide();
+             $('#id_nakshatram').hide();
+         }
+    });
+
+   
+    $('input:radio[value="lunar"]').click(function() {
+        if($(this).is(":checked")) { 
+            $('#id_maasam').show();
+            $('#id_paksham').show();
+            $('#id_tithi').show();
+            $('#id_nakshatram').hide();
+            $('#id_rasi').hide();          
+            $('#id_dob').hide();
+        }
+    });
+ 
+     $('input:radio[value="solar"]').click(function() {
+        if($(this).is(":checked")) {
+            $('#id_nakshatram').show();
+            $('#id_rasi').show();
+            $('#id_tithi').show();
+            $('#id_paksham').hide();
+            $('#id_maasam').hide();
+            $('#id_dob').hide();
+          
+        }
+    });
+
+
+
+</script>
+{% endblock javascripts %}

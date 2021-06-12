@@ -1,0 +1,143 @@
+{% autoescape on %}
+<script type="text/template" id="sevaDetailsCollectionTpl">
+    <div class="main-header">
+        <h4>Seva List
+            <span class="pull-right add-seva">
+            <small><a><i class="fa fa-fw fa-plus"></i>Add</a></small>
+            </span>
+        </h4>
+    </div>
+    <div class="seva-details"></div>
+</script>
+
+<script type="text/template" id="sevaDetailsTileTpl">
+    <div class="section box-border-bottom hover seva-tile content-padding">
+        <div>
+            <h4>
+                <span class="label label-info" title="Seva Id"><%= ssid %></span>
+                <span class="pull-right edit-seva hover-show">
+                    <small><a><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                </span>
+            </h4>
+        </div>
+
+        <div>
+            <div>
+                <h4>
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                    <span style="margin-left:10px;"><%= sevaCategory.name%></span>
+                    <small class="muted">
+                        (<%= organisation.name %><% if(sevaCategory.location){%>, <%=
+                        sevaCategory.location %><% }%>)
+                    </small>
+                </h4>
+            </div>
+
+            <div>
+                <i class="fa fa-user fa-fw"></i>
+                <small>In name of:</small>
+                <span>
+                    <%
+                    if(inTheNameOf.toLowerCase()=='donor'){
+                    %>Donor<%
+                    }
+                    else {
+                    %><%= inTheNameOf %><%
+                    }
+                    %>
+                </span>
+            </div>
+            <% if(startDate ) { %>
+                <% if (sevaDateSummary) { %>
+                    <div>
+                        <i class="fa fa-fw fa-calendar"></i>
+                        <small>Seva day:</small>
+                        <span id="seva_date_summary"><%= sevaDateSummary %></span>
+                    </div>
+                <% } %>
+
+                <% if (sevaCategory.showStartDate) { %>
+                    <div>
+                        <i class="fa fa-fw fa-calendar"></i>
+                        <small>Start Date:</small>
+                        <span><%= startDate %></span>
+                    </div>
+                <% } %>
+
+            <% } %>
+
+            <% if(occasion) { %>
+            <div>
+                <i class="fa fa-fw fa-gift"></i>
+                <small>Occasion:</small>
+                <span><%= occasion %></span>
+            </div>
+            <% } %>
+
+            <%if(inTheNameOf && inTheNameOf.toLowerCase()!='donor' ){ %>
+            <% if(gotram) { %>
+            <div>
+                <i class="fa fa-fw fa-anchor"></i>
+                <small>Gotram:</small>
+                <span><%= gotram %></span>
+            </div>
+            <% } %>
+            <% try { %>
+            <% if(nakshatram){ %>
+            <div>
+                <i class="fa fa-fw fa-star"></i>
+                <small>Nakshatram:</small>
+                <span><%= nakshatram %></span>
+            </div>
+            <% } %>
+            <% }catch(e){}%>
+
+
+            <% } %>
+
+
+            <% if(inTheNameOf.toLowerCase()!='donor'){ %>
+
+            <div style="position:relative;" class="muted">
+                <i class="fa fa-rupee fa-fw fa-2g"></i>
+                <i class="fa fa-user" style="font-size: 10px;position: absolute;color: gray;left: 13px;top: 10px;"></i>
+                <small>Donor:</small>
+                <span><%=memberName%></span>
+            </div>
+            <% } %>
+
+
+            <%if(inTheNameOf && inTheNameOf.toLowerCase()!='donor' && sevaAddress && sevaAddress.address){ %>
+            <div>
+                <div><h4>Address</h4></div>
+                <% if(sevaAddress.address){%>
+                <div style="text-transform:capitalize;"><span title="Address"><%= sevaAddress.address %></span></div>
+                <%}%>
+                <div>
+                    <% if(sevaAddress.city){%><span title="City"
+                                                    style="text-transform:capitalize;"><%= sevaAddress.city %></span><%}%>
+                    <% if(sevaAddress.district){
+                    %><span title="District" style="text-transform:capitalize;">, <%= sevaAddress.district %></span><%
+                    }%>
+                    <% if(sevaAddress.state) {
+                    %><span title="State" style="text-transform:capitalize;">, <%= sevaAddress.state %></span><%
+                    }%>
+                </div>
+                <div>
+                    <% if(sevaAddress.country){
+                    %><span title="Country" style="text-transform:capitalize;"><%= sevaAddress.country%></span><%
+                    }%>
+                    <% if(sevaAddress.pin){
+                    %><span title="Pin"> <%= sevaAddress.pin%></span><%
+                    }%>
+                </div>
+            </div>
+            <% } %>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</script>
+{% endautoescape %}
+
+{#<div><span title="Seva Date"><i class="fa fa-fw fa-calendar"></i> <%= new Date(sevaDate).format('d M')%></span></div>#}

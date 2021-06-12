@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Send an email{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="content">
+            <h1>Send an email</h1>
+            <form action="" method="post" id="id_email" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <tr><th><label for="id_mode">Mode:</label></th>
+                   <td>{{form.mode}}</td></tr><br/>
+                <div id="recipients">
+                     <tr><th><label for="id_recipient">To:</label></th>
+                     <tr><td><input  class="form-control" type="email" name="recipient_list" id="recipient" multiple /></td></tr>
+
+                     </div>
+                </div>
+                <div id="all_recipients">
+                    <tr><th><label for="id_recipient">To:</label></th>
+                        <td><input class="form-control" type="email" name="recipient_list" id="recipient_all" multiple readonly/></td></tr>
+                </div>
+                <div id="group_recipients">
+                    <tr><th><label for="id_to">To:</label></th></tr>
+                    <tr><td><input class="form-control"  value="" multiple readonly/></td></tr>
+                    <tr><th><label for="id_groups">Groups:</label></th>
+                        <td>{{form.groups}}</td></tr>
+                </div>
+
+                <div id="email_cc">
+                 <tr><th><label for="id_cc">Cc:</label></th>
+                     <td><input class="form-control" type="email" name="cc_list" id="cc" multiple/></td></tr>
+                </div>
+
+                <tr><th><label for="id_subject">Subject:</label></th>
+                   <td>{{form.subject}}</td></tr>
+                <tr><th><label for="id_message">Message:</label></th>
+                    <td>{{form.message}}</td></tr>
+
+                <tr><th><label for="id_attachment">Attachment:</label></th>
+                        <td><input type="file" name="attachment" id="id_attachment" multiple/></td></tr><br />
+
+                <br /><br /><br />
+                <div style="text-align:center">
+                    <button  class="default btn btn-primary" onClick="return(validate());" >Send</button>
+                    <button class="btn btn-default" type="reset" name="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script type="text/javascript">
+$(function() {
+    $('#id_recipient').focus();
+
+    if($('form input[type=radio]:checked').val() == "others") {
+         $('#recipients').show();
+         $('#email_cc').show();
+         $('#all_recipients').hide(); 
+         $('#group_recipients').hide();
+    }
+
+    $('input:radio[value="others"]').click(function() {  
+         if($(this).is(":checked")) {
+             $('#recipients').show();
+             $('#email_cc').show();
+             $('#all_recipients').hide();
+             $('#group_recipients').hide();
+         }
+    });
+
+   
+    $('input:radio[value="group"]').click(function() {
+        if($(this).is(":checked")) { 
+            $('#group_recipients').show();
+            $('#recipients').hide()
+            $('#email_cc').show();
+            $('#all_recipients').hide();
+                      
+        }
+    });
+ 
+     $('input:radio[value="all"]').click(function() {
+        if($(this).is(":checked")) {
+            $('#all_recipients').show();
+            $('#recipients').hide();
+            $('#email_cc').show();
+            $('#group_recipients').hide();
+          
+        }
+    });
+
+
+});
+
+function validate() {
+    var mode = $('input[name="mode"]:checked').val();
+    var to_val = $('#recipient').val();
+    var msg = $('#id_message').val();
+
+    //Alert user in case of no email field in others mode  
+    if(mode == 'others' && to_val == '') {
+        alert("Please Enter recipient field");
+        return false;
+    }
+    // Alert user in case of no message
+    if(msg == '') {
+        alert("Please enter message.");
+        return false;
+    }
+
+    $('#id_email').submit();
+    return true;
+}
+function displayVal() {
+    var group_vl = $('#id_groups option:selected').text();
+     $("#group_recipients input").val(group_vl);
+     $("#all_recipients input").val("All")
+}
+$("select").change(displayVal);
+displayVal();
+
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,30 @@
+{% autoescape on %}
+<script type="text/template" id="sevaCategoryTileTpl">
+    <% if(length) { %> <% } %>
+    <td><%= code.toUpperCase() %></td>
+    <td><%= name %></td>
+    <td><%= organisation.name %></td>
+    <td><%= location %></td>
+    <td><%= sponsorItemType %> </td>
+    <td>
+        <%= duration %>
+        <% if(durationType && durationType != 'life_time') { %>
+            <%= durationType %>/s
+        <% } else if(durationType == 'life_time'){ %>
+            <%= durationType.replace('_', ' ') %>
+        <% } %>
+    </td>
+    <td> <%= recurrence %> </td>
+
+	<td><%= amount %> <i class="icon-rupee"></i></td>
+    <td width="200px">
+		<%= (status) ? "Enabled" : "Disabled"  %>
+        <span class="pull-right" style="margin -top: -25px;">
+            <div class="seva-category-action edit">
+                <i class="icon-edit edit pull-left" style="position:relative;top:2px;"></i>
+                <small><a style="margin-left:5px;" title="Edit seva category details">Edit</a></small>
+            </div>
+        </span>
+    </td>
+</script>
+{% endautoescape %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="login-form">
+        <div class="well pull-left">
+            <div>
+                <a class="btn btn-large btn-primary" style="margin-top: 10px;" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
+                    <span style="font-weight:bold;font-size:22px;float:left;margin-right:12px;"><i
+                            class="fa fa-google icon-white"></i></span>
+                    <span style="float: left;font-size: 14px;margin-right: 3px;">Login with</span><span
+                        style="font-weight: bold;margin-right: 22px;">Google</span>
+                </a>
+            </div>
+
+            <div>
+                <a class="btn btn-primary btn-large" style="margin-top: 10px;" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+                    <span style="font-weight:bold;font-size:22px;float:left;font-weight: bold;margin-right:12px;"><i
+                            class="fa fa-facebook icon-white"></i></span><span
+                        style="font-size:14px;">Login with </span><span
+                        style="font-weight: bold;">Facebook</span>
+                </a>
+            </div>
+            <div class="center" style="margin-top: -10px;">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td width="90px">
+                            <hr>
+                        </td>
+                        <td width="30px;" style="font-weight: bold;">OR</td>
+                        <td width="90px;">
+                            <hr>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div><h3>Login</h3></div>
+            <form action="{% url 'login' %}" method="post">
+                <fieldset>
+                    {%csrf_token%}
+                    {{form}}
+                     <div class="controls">
+                        <label class="checkbox" for="remember_me">
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="on">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <div>
+                        <input class="btn btn-primary btn-large"
+                               style="margin-top: 10px; width: 220px; font-weight: bold;" type="submit"
+                               id="_submit" name="_submit" value="Submit">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}

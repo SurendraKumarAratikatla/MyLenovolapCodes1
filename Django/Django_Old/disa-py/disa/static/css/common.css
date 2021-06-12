@@ -1,0 +1,186 @@
+/** Highlights the input elements */
+
+input.highlight, select.highlight, textarea.highlight {
+    background-color: #FFC;
+}
+
+/** Required fields have bold font */
+.form-horizontal .required,
+.form .required {
+    font-weight: bold;
+}
+
+/** A red * appears before required fields */
+.form-horizontal label.required:after,
+.form label.required:after {
+    color: #e32;
+    content: ' *';
+    display: inline;
+}
+
+/**
+* Auto complete
+*/
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 20px;
+}
+
+/**
+* Removes the styling for ul
+*/
+ul.no-style {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.table tr:hover td {
+    background-color: #F9F9F9;
+}
+
+.table tr.highlight td {
+    background-color: #E4EAF2;
+}
+
+.table tr.highlight:hover td {
+    background-color: #EFF2F6;
+}
+
+.page-header + .section {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.section {
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.page-break {
+    display: none;
+}
+
+a {
+    color: #598ede;
+}
+
+a:hover {
+    color: #049cdb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.title {
+    color: #000000;
+}
+
+.title:hover {
+    color: #598ede;
+    text-decoration: none;
+}
+
+/** Override bootstrap css**/
+.form-horizontal .control-group {
+    margin-bottom: 10px;
+}
+
+label.control-label + .field-value {
+    margin-top: 5px;
+    padding-left: 5px;
+    float: left;
+}
+
+/*
+The structure like
+    -> page-header
+        -> main-header
+            -> sub-header
+*/
+.main-header {
+    background-color: #eeeeee;
+    padding: 5px;
+}
+
+.content-padding {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.sub-header {
+    background-color: #eeeeee;
+    text-align: center;
+}
+
+/** Center align content of the div **/
+div.center {
+    text-align: center;
+}
+
+/** Creates a border-top **/
+.box-border-top {
+    border-top: 1px solid #eeeeee;
+}
+
+.box-border-bottom {
+    border-bottom: 1px solid #eeeeee;
+}
+
+/** Creates a border around **/
+.box {
+    border: 1px solid #eeeeee;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.edit-member {
+    cursor: pointer;
+}
+
+/* Address style sheet */
+li, .address-tile-tpl {
+    list-style-type: none;
+}
+
+.divider {
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #ffffff;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.loader {
+    background-image: url("/images/loading.gif");
+    background-repeat: no-repeat
+}
+
+#footer .alert {
+    background-color: #eeeeee;
+}
+
+.icon-google:before {
+    content: "\f0d5";
+    width: 0.58em;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.hover .hover-show {
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-out;
+    -moz-transition: opacity 400ms ease-out;
+    -o-transition: opacity 400ms ease-out;
+    transition: opacity 400ms ease-out;
+}
+
+.hover:hover .hover-show {
+    opacity: 1;
+}
+
+.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+    width: 1230px;
+}
+

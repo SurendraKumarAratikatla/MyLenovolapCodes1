@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html' %}{% endblock body_header %}
+{% block stylesheets %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="{% static 'css/jackedup.css' %}">
+<style type="text/css">
+
+table.sevas tr.seva-tile {
+    cursor: pointer;
+}
+</style>
+<style type="text/css" media="print">
+#header,#footer{display:none}.container{float:none;margin:0;width:100%}body{background:white;font-size:12pt}.container{background:transparent}.page-break{display:block;page-break-before:always}.no-print{display:none}.sf-toolbar{display:none}
+.page-header{display:none}
+</style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="content page1">
+            <div class="page-header">
+                <div class="pull-right" style="margin-top:20px">
+                    <button type="button" name="print" class="btn pull-right"
+                            style="margin-left:10px;font-weight:bold;">
+                        <i class="icon-print"></i> Print Preview
+                    </button>
+
+                    <div class="pull-right">
+                        <select name="print-template-list">
+                            <option value="">-- Choose Template --</option>
+                            <option value="prasadamDispatch">Prasadam Dispatch Letter</option>
+                            <option value="dailySevaKarta">Daily Seva
+                                Kartas List
+                            </option>
+                            <option value="emailCardIssueList">Email Card Issue List</option>
+                        </select>
+                    </div>
+                </div>
+                <h1 class="pull-left">Sevas
+                    <small>
+                        Shaswata Seva
+                    </small>
+                </h1>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="row-fluid show-grid" style="padding-top:10px;">
+        <div class="form-inline muted">
+            <div class="controls">
+                <label class="control-label required" for="seva-category">Seva Category</label>
+                <div class="input-append">
+                    <select id="seva_category" class="span12" name="seva_category">
+                        <option value="">---Seva Category---</option>
+                        {% for seva in sevas %}
+                            <option value="{{ seva.id }}" {% if forloop.first %}
+                                    selected {% endif %}>{{ seva.name|capfirst }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <label class="control-label required" for="fromDate-input">From</label>
+                <div class="input-append">
+                    <input type="text" class="input-medium" id="fromDate-input" name="fromDate-input" readonly="readonly">
+                    <span class="add-on" style="cursor:pointer;"><i class="icon-calendar"></i></span>
+                    <input type="hidden" name="fromDate" value="2016-04-01">
+                </div>
+
+                <label class="control-label required" for="toDate-input" style="margin-left:15px;">To</label>
+                <div class="input-append">
+                    <input type="text" class="input-medium" id="toDate-input" name="toDate-input" readonly="readonly">
+                    <span class="add-on" style="cursor:pointer;"><i class="icon-calendar"></i></span>
+                    <input type="hidden" name="toDate" value="2016-04-19">
+                </div>
+                <button class="btn btn-success" name="dateRange" style="margin-left:10px;" onclick="updateSevaDonors()">
+                    <i class="icon-filter icon-white"></i> Go
+                </button>
+            </div>
+        </div>
+
+        <div class="clear:both;"></div>
+    </div>
+
+            <div class="section">
+                <div id="seva-search"></div>
+            </div>
+        </div>
+        <div class="content print-view hide">
+            <div class="page-header no-print">
+        <div class="pull-right" style="margin-top:20px;">
+            <button type="button" class="btn btn-success pull-right" name="mprint"
+                    style="margin-left:10px;font-weight:bold;"><i class="icon-print icon-white"></i>
+                Print
+            </button>
+            <button type="button" class="btn pull-right" name="back">
+                Back
+            </button>
+        </div>
+        <h1 class="pull-left">Print Preview
+            <small id="pname">
+                
+            </small>
+        </h1>
+        <div style="clear:both;"></div>
+    </div>
+        </div>
+        <div id="previewhtml2"></div>
+    </div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html' %}{% endblock body_footer %}
+
+{% block javascripts %}
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="{% static 'js/humane.min.js' %}"></script>
+<script type="text/javascript">
+var notify = humane.create({baseCls: 'humane-jackedup', addnCls: 'humane-jackedup-error'})
+
+$(document).ready(function(){
+        updateSevaDonors();
+
+        $(document).on("click", "table.sevas tr.seva-tile", function () {
+            $(this).toggleClass("highlight");
+        }).on("click","input[name='print-seva-all']", function(){
+            if($(this).is(':checked')){
+                $("table.sevas tr.seva-tile").addClass("highlight");
+            }else{
+                $("table.sevas tr.seva-tile").removeClass("highlight");
+            }
+
+        }).on("click", 'button[name="print"]', function(){
+            preview = $("select[name='print-template-list']").val();
+            if (!preview) {
+                notify.log("Choose template for printing");
+                return
+            }
+            seva_leng = $("table.sevas tr.seva-tile.highlight").length
+            if (!seva_leng){
+                notify.log("Select sevas for printing");
+                return
+            }
+
+
+
+            template_names = {'prasadamDispatch':'Prasadam dispatch letter',
+                              'addressLabel':'Address labels',
+                              'dailySevaKarta':'Daily Seva Kartas List',
+                              'emailCardIssueList':'Email Card Issue List'}
+            $("#pname").html(template_names[preview]);
+            $(".page1").hide();
+            $(".print-view").removeClass('hide');
+            html = $("#previewhtml").html();
+           // $(result).find("#previewhtml").html("");
+            $("#previewhtml2").html(html);
+            $("#previewhtml2 #view-"+preview).removeClass('hide');
+            $('table.sevas tr.seva-tile.highlight').each(function(index, currentElement) {
+                id = $(currentElement).attr("data-id");
+                $("#previewhtml2 #view-"+preview).find("."+id).removeClass('hide');
+
+            });
+
+
+        }).on("click", 'button[name="back"]', function(){
+            $(".page1").show();
+            $("#previewhtml2").html("");
+            $(".print-view").addClass('hide');
+            //$("#view-emailCardIssueList").show();
+        }).on("click", 'button[name="mprint"]', function(){
+            
+        window.print();
+        var currentUrl = window.location.href;
+        document.location.href = currentUrl
+        });
+
+        
+});
+
+function getDateObject(date) {
+    if (!date) {
+        return null
+    }
+    var parts = date.match(/(\d+)/g);
+    var dateObject = new Date(parts[0],parts[1] - 1,parts[2]);
+    return dateObject
+}
+
+
+
+$("input[name='fromDate-input']").datepicker({
+            dateFormat: "d MM, yy",
+            altFormat: "yy-mm-dd",
+            altField: "input[name='fromDate']",
+            onClose: function(selectedDate) {
+                $('input[name="toDate-input"]').datepicker("option", "minDate", selectedDate)
+            }
+        });
+        var self = this;
+        $('input[name="fromDate-input"] + span').on("click", function() {
+            $("input[name='fromDate-input']").datepicker("show");
+        });
+        $("input[name='toDate-input']").datepicker({
+            dateFormat: "d MM, yy",
+            altFormat: "yy-mm-dd",
+            altField: "input[name='toDate']",
+            onClose: function(selectedDate) {
+                $('input[name="fromDate-input"]').datepicker("option", "maxDate", selectedDate)
+            }
+        });
+        $('input[name="toDate-input"] + span').on("click", function() {
+            $("input[name='toDate-input']").datepicker("show")
+        });
+        $("input[name='fromDate-input']").datepicker("setDate", new Date);
+        $("input[name='toDate-input']").datepicker("setDate", new Date)
+//$(document).on("click", "input[name='dateRange']",updateSevaDonors());
+
+function updateSevaDonors() {
+    var from = $("input[name='fromDate']").val();
+    var to = $("input[name='toDate']").val();
+    var sid = $('#seva_category').val();
+
+    $.ajax({
+        url: "{% url 'seva-search' %}",
+        dataType: "html",
+        data:{to: to, sid: sid, from: from},
+        success: function(result) {
+            html = $(result).find("#previewhtml").html();
+            $(result).find("#previewhtml").html("");
+            $("#previewhtml").html(html);
+            $("#seva-search").html(result);
+        },
+        error: function() {}
+    });
+}
+</script>
+{% endblock javascripts %}

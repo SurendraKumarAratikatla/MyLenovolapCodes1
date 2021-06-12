@@ -1,0 +1,189 @@
+{% autoescape on %}
+<script type="text/template" xmlns="http://www.w3.org/1999/html" id="sevaPrintPreviewTpl_prasadamDispatch">
+    <% if(member.validPrimaryAddress) { %>
+    <div class="box">
+        <table border="1">
+            <tr>
+                <td style="padding:12px;">
+                    <div class="no-print remove pull-right"><i class="icon-remove"></i></div>
+                    <div style="clear:both;"></div>
+                    <h1 align="center">Avadhoota Datta Peetham<br/></h1>
+
+                    <h2 align="center">Sri Ganapati Sachchidananda Ashram<br/></h2>
+
+                    <div align="center">
+                        Datta Nagar, Ooty Road, Mysore 570025 India<br/>
+                        Tel: 0821- 2486486 Fax: 2487487<br/>
+                        <span class="muted">Email:</span> mail@dattapeetham.com <span class="muted">Website:</span> www.dattapeetham.com
+                        <hr/>
+                    </div>
+                    <h4 align="center">Prasadam for Shashwata Seva</h4>
+                    <div style="width: 350px;">
+                        <b>To<br/>
+                            <%= member.mid %>, <%= ssid%><br/>
+                            <% if(member.salutation){ %>
+                            <%=member.salutation%>
+                            <%}else{ %>
+                            Sri&nbsp;
+                            <% } %>
+                            <%=member.name%>
+                            <%=member.surname%><br/>
+                        </b>
+                        <b>
+                                <% if(member.validPrimaryAddress) {
+                                    address = member.validPrimaryAddress;
+                                    %>
+                                    <%=address.address %><br/>
+                            <% if(address.country =='india' || address.country =='India') { %>
+                                <% if (address.city) { %> <%=address.city%>,<% } %>
+                                <%=address.district%>
+                                <% if(address.city && address.district) { %> ,<br/> <% } %>
+                                <%=address.state %><% if(address.state){ %>,<br/><% } %>
+                            <% } else { %>
+                            <% if (address.city) { %> <%=address.city%>,<% } %>
+                            <%=address.state %><% if(address.state){ %>,<br/><% } %>
+                            <% } %>
+                                    <%=address.country %><% if( address.country && address.pin){%>,<% }else{ %>.<% } %>
+                                    <% if(address.pin) {%><%=address.pin%>.<% } %>
+                                <% } %>
+                        </b>
+                    </div>
+
+                    <div align="center"> -------------------------------------------------------------------------</div>
+                    <span size="3">
+                        Dear Devotee!<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jaya Guru Datta<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are pleased to inform you that Daily Seva/Puja was performed in <br/>
+                        Dattatreya Temple and other temples in Datta Peetham, along with Daily<br/>
+                        Homa, Gopuja and Maha Naivedyam on <% if(isLunar){ %><%= sevaDate %><% }else{ %>
+                            <%= sevaDate %> <% } %>
+                            <%if(occasion){ %>(<%= occasion %>)<% } %>.<br/>
+                        <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kindly find the enclosed Prasadam for the Seva.<br/>
+                        <br/>
+                        In Sadguru Seva<br/>
+                        <br/>
+                        <br/>
+                        Authorised Signatory – Seva Counter<br/>
+                    </span>
+                    <hr/>
+                    <span size="3">For any clarification/ request kindly write to <u><span
+                                    color="blue">vkg@dattapeetham.com</span></u></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <% } %>
+</script>
+
+<script type="text/template" id="sevaPrintPreviewTpl_addressLabel">
+    <div class="print-preview span4">
+        <div class="print-preview-content">
+            <span class="no-print remove pull-right"><i class="icon-remove"></i></span>
+            To<br/>
+            <%= ssid%> ,<%=member.mid %><br/>
+            <% if(member.salutation){ %>
+            <%=member.salutation%>
+            <%}else{ %>
+            Sri&nbsp;
+            <% } %>
+            <%=member.name%>
+            <%=member.surname%><br/>
+
+            <% _.each(member.addresses,function(address) { %>
+            <% if(address.isPrimary && address.isValid ) { %>
+            <%=address.address %><br/>
+            <% if(address.country =='india' || address.country =='India') { %>
+            <% if (address.city) { %> <%=address.city%>,<% } %>
+            <%=address.district%>
+            <% if(address.city && address.district) { %> ,<br/> <% } %>
+            <%=address.state %>&nbsp;<% if(address.state){ %>,<br/><% } %>
+            <% } %>
+            <%=address.country %>
+            <% if( address.country && address.pin) { %>&nbsp;,&nbsp;<% }else{ %>&nbsp;.<% } %>
+            <% if(address.pin) { %> <%=address.pin%>.<% } %>
+            <% } %>
+            <% }); %>
+            <br/>
+            <% if(member.mobile || member.phone) { %>
+            Tel &nbsp;:&nbsp;
+            <% } %>
+            <% if(member.mobile) { %>
+            <%= member.mobile%>
+            <% } %>
+            <% if(member.phone) { %>
+            <%= member.Phone%><br/>
+            <% } %>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="sevaPrintPreviewTpl_dailySevaKarta">
+    <div class="box">
+        <span class="no-print remove pull-right"><i class="icon-remove"></i></span>
+        <%=member.mid %>, <%= ssid%><br/>
+        <% if(member.salutation){ %>
+        <%=member.salutation%>
+        <%}else{ %>
+        Sri
+        <% } %>
+        <%=member.name%> <%=member.surname%><br/>
+        <% if(member.place){ %>
+        <div><span title="Place"><i class="icon-map-marker"></i> <%=member.place%></span></div>
+        <% } %>
+        <span style="text-transform:capitalize;" title="In the name of"><i class="icon-user-md">
+                <span class="muted" style="font-size: smaller;"> In The Name Of: </span> </i> <%= inTheNameOf %>
+        </span><br/>
+        <% if(inTheNameOf=='donor' || inTheNameOf == 'Donor') { %>
+        <% if(member.gotram) { %>
+        <div><span style="text-transform:capitalize;" title="Gotram"><i class="icon-anchor"></i> <%= member.gotram %></span></div>
+        <% } %>
+        <% if(member.nakshatram) { %>
+        <div><span style="text-transform:capitalize;" title="Nakshatram"><i class="icon-star"></i> <%= member.nakshatram %></span></div>
+        <% } %>
+        <% }else{ %>
+        <% if(gotram) { %>
+        <div><span style="text-transform:capitalize;" title="Gotram"><i class="icon-anchor"></i> <%=gotram %></span></div>
+        <% } %>
+        <% try{ %>
+        <% if(nakshatram) { %>
+        <div><span style="text-transform:capitalize;" title="Nakshatram"><i class="icon-star"></i> <%= nakshatram %></span></div>
+        <% } %>
+        <% }catch(e){} %>
+        <% } %>
+
+        <% if(sevaDate) { %><div><span title="Seva Date"><i class="icon-calendar"></i> <%= sevaDate %></span></div><% } %>
+        <% if(occasion) { %><div><span title="Occasion" style="text-transform:capitalize;"><i class="icon-gift"></i> <%= occasion %></span></div><%}%>
+    </div>
+</script>
+
+<script type="text/template" id="sevaPrintPreviewTpl_emailCardIssueList">
+    <div class="box">
+        <span class="no-print remove pull-right"><i class="icon-remove"></i></span>
+        <%=member.mid %>, <%= ssid%><br/>
+        <% if(member.salutation){ %>
+        <%=member.salutation%>
+        <%}else{ %>
+        Sri
+        <% } %>
+        <%=member.name%> <%=member.surname%><br/>
+        <% if(member.place) {   %>
+        <div><span style="text-transform:capitalize;" title="Place"><i class="icon-map-marker"></i> <%= member.place %></span></div>
+        <% } %>
+        <div>---------------------------</div>
+        <div><span title="In the name of" style="text-transform:capitalize;"><i class="icon-user-md"></i>
+                <span class="muted" style="font-size: smaller;"> In The Name Of: </span><%= inTheNameOf %>
+            </span></div>
+        <% if(sevaDate) { %>
+        <div><span title="Seva Date"><i class="icon-calendar"></i> <%= sevaDate %></span></div>
+        <% } %>
+        <% if(occasion) { %>
+        <div><span title="Occasion" style="text-transform:capitalize;"><i class="icon-gift"></i> <%= occasion %></span></div>
+        <% } %>
+        <% if(member.email && member.email !="") { %>
+        <div><span title="Email" style="text-transform:capitalize;"><i class="icon-envelope"></i> <%= member.email%></span></div>
+        <% } %>
+    </div>
+</script>
+
+{% endautoescape %}

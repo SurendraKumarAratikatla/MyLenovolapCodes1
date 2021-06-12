@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Prasadam for your Seva on {{date}}, could not be delivered, due to incorrect address. 
+Please update with adp@sgsdatta.org.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham.

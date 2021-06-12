@@ -1,0 +1,33 @@
+{% autoescape on %}
+<script type="text/template" id="sevaCategoriesHomeTpl">
+    <div class="page-header">
+        <h1>Seva Categories
+            <span class="pull-right btn btn-success add" style="margin-top:12px;" title="Add new seva category">
+                <i class="icon-plus icon-white"></i> Add
+            </span>
+        </h1>
+    </div>
+
+    <div class="section">
+        <% if(length == 0) {%>
+        <h3>No Seva Categories</h3>
+        <% }else{ %>
+        <table class="table sevaCategories" border="0">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Organisation Name</th>
+                <th>Location</th>
+                <th>Sponsor Item Type</th>
+                <th>Duration</th>
+                <th>Recurrence</th>
+                <th>Amount( <i class="icon-rupee"></i> )</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+        </table>
+        <% } %>
+    </div>
+</script>
+{% endautoescape %}

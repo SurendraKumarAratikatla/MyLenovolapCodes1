@@ -1,0 +1,75 @@
+{% load staticfiles %}
+{% load bootstrap %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="section">
+            <table id="awardees-list" class="table table-striped table-condensed dataTable no-footer"
+                   style="margin-top: 20px; width: 1200px;" role="grid" aria-describedby="awardees-list_info">
+                <thead>
+                 <tr class="printer-hide awardees-actions" role="row">
+                    <td colspan="5" style="margin-bottom: 10px;" rowspan="1">
+                        <div class="pull-right">
+                            <a href="{% url 'export-awardee' %}?q={{search_by}}&searchkey={{searchkey}}&" type="button" class="export-awardees btn btn-default" name="export">
+                                <i class="fa fa-export" style="margin-right: 5px;"></i> Export
+                            </a>
+                        </div>
+                 </tr>
+                <tr role="row">
+                    <th data-id="photo" class="sorting_asc" rowspan="1" colspan="1" aria-label="Photo"
+                        style="width: 86px;">Photo
+                    </th>
+                    <th data-id="memberName" class="no-wrap sorting" tabindex="0" aria-controls="awardees-list"
+                        rowspan="1" colspan="1" aria-label="Member Name: activate to sort column ascending"
+                        style="width: 333px;">Member Name
+                    </th>
+                    <th data-id="name" class="no-wrap sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Award: activate to sort column ascending" style="width: 234px;">Award
+                    </th>
+                    <th data-id="year" class="sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Year: activate to sort column ascending" style="width: 40px;">Year
+                    </th>
+                    <th data-id="specialization" class="sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Specialisation: activate to sort column ascending"
+                        style="width: 406px;">Specialisation
+                    </th>
+                    <th class="center clickable sorting_disabled" rowspan="1" colspan="1" aria-label=""
+                        style="width: 41px;"></th>
+                </tr>
+                </thead>
+                {% for awardee in awardees %}
+                    <tr>
+                        <td>
+                            <div>
+                                <img src="{% static 'img/user.jpg' %}" width="70px" height="80px" alt="image" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="label label-primary" title="Member Id">MID#{{ awardee.member.mid }}</div>
+                            <div>{{ awardee.member.name|capfirst }}</div>
+                        </td>
+                        <td>
+                            {{ awardee.name|capfirst }}
+                        </td>
+                        <td>
+                            {{ awardee.year }}
+                        </td>
+                        <td>
+                            {{ awardee.specialization }}
+                        </td>
+                        <td class=" center clickable"><span class="edit-awardee" title="edit"><a
+                                href="{% url 'member-edit' awardee.member.id %}"><span
+                                class="glyphicon glyphicon-pencil"></span></a></span> <span class="view-awardee"
+                                                                                            title="view"><a
+                                href="{% url 'member-view' awardee.member.id %}"><span
+                                class="glyphicon glyphicon-eye-open"></span></a></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

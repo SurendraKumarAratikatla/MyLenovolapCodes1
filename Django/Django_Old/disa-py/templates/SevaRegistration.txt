@@ -1,0 +1,1 @@
+message=Dear%20{name}%2C%0AJaya%20Guru%20Datta%0A%0AYour%20Seva%20is%20successfully%20added%20to%20ADP%20Register.%20%0APlease%20contact%20adp%40sgsdatta.org%2C%20as%20needed%20with%20this%20ID%23{ssid}.%0A%0AWith%20Best%20Regards%0AIn%20Sadguru%20Seva%0ATeam%20-%20Shashwata%20Seva%0AAvadhoota%20Datta%20Peetham.%0A

@@ -1,0 +1,495 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+{% block body %}
+<div class="container">
+   <div class="content">
+       <div class="page-header">
+       <h1>{% if data.id %} Edit {% else %} Add {% endif %} Seva</h1>
+       </div>
+       <div class="section row">
+       <div class="form-horizontal" role="form">
+           <form method="post" id="seva_form">
+               {% csrf_token %}
+               <div class="col-sm-8">
+		            <div class="form-group">
+		                <div  class="col-sm-3 col-sm-offset-2">
+		                    {% if data.id %}
+		                    <h3>
+		                    <div  class="label label-info">
+		                        {{ data.ssid }}
+		                   </div>
+		                   </h3>
+		                    {% endif %}
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label required" for="organisation">Organisation</label>
+		                    <div class="col-md-4">
+		                        <select class="form-control" id="oid" name="oid">
+		                            <option value="">--Select Organisation--</option>
+		                            {% for organisation in organisations %}
+		                            <option value="{{ organisation.id }}" {% if data.id and organisation.id == data.oid.id%} selected='selected' {% endif %}>{{ organisation.name }} </option>
+		                            {% endfor %}
+		                        </select>
+                                       {% for error in form.organisation.errors %}
+                                       <span class="help-inline text-danger">{{ error }}</span>
+                                       {% endfor %}
+		                   </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label required" for="sevaCategory">Seva Category</label>
+		                <div class="col-md-4">
+		                    <select class="form-control" id="sid" name="sid">
+		                        <option value="">--Select Seva Category-- </option>
+		                         {% for sevaCategory in sevaCategories %}
+		                         <option value="{{ sevaCategory.id }}"
+		                             {% if data.id and data.sid.id == sevaCategory.id  %} selected='selected' {% endif  %}
+		                             > {{ sevaCategory.name }}</option>
+		                         {% endfor %}
+		                    </select>
+                                    {% for error in form.sevaCategory.errors %}
+                                    <span class="help-inline text-danger">{{ error }}</span>
+                                    {% endfor %}
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="calendar_type">Calendar_type</label>
+		
+		                <div  class="col-sm-4">
+		                   <input type="radio" name="calendar_type" value="lunar" {% if data.calendar_type == 'lunar' %} checked='checked' {% endif %}> Lunar
+		                   <input type="radio" name="calendar_type" value="solar" {% if data.calendar_type == 'solar' %} checked='checked' {% endif %}> Solar
+		                   {% if data.id %}
+		                   <input type="radio" name="calendar_type" value="default" {% if data.calendar_type == 'default' %}  checked='checked' {% endif %}>Default
+		                   {% else %}
+		                   <input type="radio" name="calendar_type" value="default" checked='checked'>Default
+		                   {% endif %}
+		                </div>
+		            </div>
+		            <div id="id_maasam">
+		                <div class="form-group">
+		                    <label class="col-sm-2 control-label" for="maasam">Maasam</label>
+		
+		                    <div class="col-sm-4">
+		                        <select name="maasam" id="maasam" class="form-control">
+		                            <option value="">--Select Maasam--</option>
+		                            {% for m in maasam %}
+		                            <option value="{{m.maasam}}" {% if m.maasam|lower == data.maasam|lower %} selected='selected' {% endif %}>{{m.maasam|capfirst}}</option>
+		                            {% endfor %}
+		                       </select>
+		                    </div>
+		                </div>
+		            </div>
+		            <div id="id_paksham">
+		                <div class="form-group">
+		                    <label class="col-sm-2 control-label" for="paksham">Paksham</label>
+		                    <div  class="col-sm-4">
+		                        <select name="paksham" id="paksham" class="form-control">
+		                            <option value="">--Select Paksham--</option>
+		                            {% for paks in paksham %}
+		                            <option value="{{paks.paksham}}" {% if paks.paksham|lower == data.paksham|lower %} selected='selected' {% endif %}>{{paks.paksham|capfirst}}</option>
+		                            {% endfor %}
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>
+		            <div id="id_tithi">
+		                <div class="form-group">
+		                    <label class="col-sm-2 control-label" for="maasam">Tithi</label>
+		                    <div class="col-sm-4">
+		                        <select name="tithi" id="tithi" class="form-control">
+		                            <option value="">--Select Tithi--</option>
+		                            {% for t in tithi %}
+		                            <option value="{{t.tithi}}" {% if t.tithi|lower == data.tithi|lower %} selected='selected' {% endif %}>{{t.tithi|capfirst}}</option>
+		                            {% endfor %}
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>
+		            <div id="id_rasi">
+		                <div class="form-group">
+		                    <label class="col-sm-2 control-label" for="rasi">Rasi</label>
+		                    <div  class="col-sm-4">
+		                        <select name="raasi" id="raasi" class="form-control">
+		                            <option value="">--Select Rasi--</option>
+		                            {% for r in raasi %}
+		                            <option value="{{r.rasi}}" {% if r.rasi|lower == data.raasi|lower %} selected='selected' {% endif %}>{{r.rasi|capfirst}}</option>
+		                            {% endfor %}
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>
+		            <div id="id_nakshatram">
+		                <div class="form-group">
+		                    <label class="col-sm-2 control-label" for="nakshatram">Nakshatram</label>
+		                    <div  class="col-sm-4">
+		                        <select name="nakshatram" id="nakshatram" style="text-transform:capitalize;" class="form-control">
+		                            <option value="">--Select Nakshatram--</option>
+		                            {% for nak in nakshatrams %}
+		                            <option value="{{nak.nakshatram}}" {% if nak.nakshatram|lower == data.nakshatram|lower %} selected='selected' {% endif %} >{{nak.nakshatram}}</option>
+		                            {% endfor %}
+		                        </select>
+		                    </div>
+		                </div>
+		            </div>
+                            <div id="id_deflt">
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="sevadatestd">Seva Date</label>
+		                <div  class="col-sm-4">
+		                    <div class="input-group">
+		                        <input class="form-control" type="text" name="sevadatestd" id="sevadatestd" value="{{data.sevadatestd |cus_date | date:"d F, Y"}}">
+		                         <a class="input-group-addon"><i class="fa fa-calendar"></i></a>
+		                    </div>
+		                </div>
+		            </div>
+                           </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="inthenameof">In The Name Of</label>
+		
+		                <div  class="col-sm-4">
+		                   {% if data.id %} 
+		                   <input type="radio" name="inthenameof" id="inthenameofdonor" value="donor" {% if data.inthenameof == 'Donor' or data.inthenameof == 'donor' %} checked='checked' {% endif %}> Donor
+		                   <input type="radio" name="inthenameof" id="inthenameofothers" value="others" {% if data.inthenameof != 'Donor' and data.inthenameof != 'donor' %} checked='checked' {% endif %}> Others
+                                   {% else %}
+		                   <input type="radio" name="inthenameof" id="inthenameofdonor" value="donor" checked='checked'> Donor
+		                   <input type="radio" name="inthenameof" id="inthenameofothers" value="others"> Others
+                                   {% endif %}
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="name">Name</label>
+		                <div class="col-sm-4">
+                                    {% if data.id %}
+		                        <input class="form-control" type="text" name="name" id="name" {% if data.inthenameof == 'Donor' or data.inthenameof == 'donor' %} value = "{{memdata.name}}" {% else %} value = "{{data.inthenameof}}" {% endif %}>
+                                    {% else %}
+                                        <input class="form-control" type="text" name="name" id="name" readonly value={{memdata.name}}>
+                                    {% endif %}
+		                </div>
+                            </div>
+                           <div id="id_gotram">
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="gotram">Gotram</label>
+		                <div class="col-sm-4">
+                                    {% if data.id %}
+		                    <input class="form-control" type="text" name="gotram" id="gotram" {% if data.inthenameof == 'Donor' or data.inthenameof == 'donor' %} value = "{{memdata.gotram}}"  {% else %} value = "{{data.gotram}}" {% endif %} >
+                                    {% else %} 
+		                    <input class="form-control" type="text" name="gotram" id="gotram" readonly value = "{{memdata.gotram}}"> 
+                                    {% endif %}
+		                </div>
+		            </div>
+                           </div>
+                           <div id="id_occasion">
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="occasion">Occasion</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="occasion" name="occasion" value="{{ data.occasion }}">
+		                </div>
+		            </div>
+                           </div>
+                           <div id="id_others">
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="address">Address</label>
+		                <div class="col-sm-4">
+		                    <input type="text"  class="form-control" id="address" name="address" style="line-height:60px" value="{{ sevaaddress.address }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="city">City</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="city" name="city" value="{{ sevaaddress.city }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="district">District</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="district" name="district" value="{{ sevaaddress.district }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="state">State</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="state" name="state" value="{{ sevaaddress.state }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="country">Country</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="country" name="country" value="{{ sevaaddress.country }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="phone">Phone Number</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="phone" name="phone" value="{{ sevaaddress.phone }}">
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label" for="pincode">Pin Code</label>
+		                <div class="col-sm-4">
+		                    <input class="form-control" type="text" id="pincode" name="pincode" value="{{ sevaaddress.pin }}">
+		                </div>
+		            </div>
+                           {% if data.id %} 
+                            <div class="form-group">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <div class="checkbox">
+                                            <label>
+                                            <input type="checkbox" id="isvalid" name="isvalid"  value="{{sevaaddress.isvalid}}" {% if sevaaddress.isvalid %} checked='checked' {%endif %}> Valid
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                          {% endif %}
+                          </div>
+		            <div class="form-group section bg-info">
+		                <div class="col-sm-10 col-sm-offset-2">
+		                    <button name="submit" class="btn btn-primary" onClick="return(Validate());">Save</button>
+                                    {% if user|can:'VIEW_MEMBER_DETAILS' %}
+		                    <a href="{% url 'member-view' memdata.id %}" class="btn btn-default">Cancel</a>
+                                    {% elif user|can:'VIEW_SELF_DETAILS' %}
+		                        <a href="{% url 'profile-view' %}" class="btn btn-default">Cancel</a>
+                                    {% endif %}
+		                </div>
+		            </div>
+		    	</div>
+		    	<div class="col-sm-4">
+	        		<div class="content-padding">
+        				<div class="seva-collection row">
+							<div class="seva-details-tile col-xs-12">
+								<div class="section box-border-bottom hover seva-tile content-padding">
+									<div>
+										<div class="member-photo">
+											<img width="120px" height="120px" src="{% if memdata.photo %}{{memdata.photo}}{%else%}{% static 'img/user.jpg' %} {%endif%}" class="img-responsive">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div style="padding-bottom: 5px;">
+							<h4 style="color:#5bc0de;"><b> Sri
+					
+							{{memdata.name}}
+					
+							{{memdata.surname}}</b></h4>
+							<div>
+								<h4><span class="label label-info" title="Member Id">MID#{{memdata.mid}}</span><span class="pull-right edit-member"> </span></h4>
+							</div>
+							<div style="margin-top:-2px;">
+                                                       {% if memdata.phone %}
+								<span title="Place" style="text-transform:capitalize;"><i
+									class="fa fa-fw fa-map-marker"></i> {{memdata.place}}</span>
+                                                        {% endif %}
+							</div>
+						</div>
+
+						<div>
+                                                       {% if memdata.email %}
+							<span title="Email"><i class="fa fa-fw fa-envelope"></i> {{memdata.email}}</span>
+                                                        {% endif %}
+						</div>
+					
+						<div>
+                                                       {% if memdata.mobile %}
+							<span title="Mobile"><i class="fa fa-fw fa-mobile"></i> {{memdata.mobile}}</span>
+                                                         {% endif %}
+						</div>
+					
+						<div>
+                                                       {% if memdata.phone %}
+							<span title="Phone"><i class="fa fa-fw fa-phone"></i> {{memdata.phone}}</span>
+                                                       {% endif %}
+						</div>
+						<div>
+							{% if memdata.gotram %}
+							<span title="Gotram" style="text-transform:capitalize;"><i class="fa fa-fw fa-anchor"></i>{{memdata.gotram }}</span>
+							{% endif %}
+							{% if memdata.nakshatram %}
+							<span title="Nakshatram" style="text-transform:capitalize;">,<i class="fa fa-fw fa-star"></i>{{memdata.nakshatram }}</span>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+
+    var year = (new Date).getFullYear();
+    $("input[name='sevadatestd']").datepicker({
+        dateFormat: "d MM, yy",
+        altFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1930:" + year
+    });
+    $("#id_maasam, #id_paksham, #id_tithi, #id_nakshatram, #id_rasi").hide();
+
+    if($('form input[type=radio]:checked').val() == "lunar") {
+        $('#id_maasam').show(); 
+        $('#id_paksham').show();
+        $('#id_tithi').show();
+        $('#id_rasi').hide(); 
+        $('#id_nakshatram').hide();
+        $('#id_deflt').hide();
+    }
+                
+    if($('form input[type=radio]:checked').val() == "solar") {
+        $('#id_rasi').show();
+        $('#id_nakshatram').show();
+        $('#id_tithi').show();
+        $('#id_maasam').hide();
+        $('#id_paksham').hide();
+        $('#id_deflt').hide();
+    }
+
+
+    if($('form input[type=radio]:checked').val() == "default") {
+         $('#id_deflt').show();
+         $('#id_maasam').hide(); 
+         $('#id_paksham').hide(); 
+         $('#id_tithi').hide(); 
+         $('#id_rasi').hide();
+         $('#id_nakshatram').hide();
+    }
+  
+    $('input:radio[value="default"]').click(function() {  
+         if($(this).is(":checked")) {
+             $('#id_deflt').show();
+             $('#id_maasam').hide();
+             $('#id_paksham').hide();
+             $('#id_tithi').hide();
+             $('#id_rasi').hide();
+             $('#id_nakshatram').hide();
+         }
+    });
+
+   
+    $('input:radio[value="lunar"]').click(function() {
+        if($(this).is(":checked")) { 
+            $('#id_maasam').show();
+            $('#id_paksham').show();
+            $('#id_tithi').show();
+            $('#id_nakshatram').hide();
+            $('#id_rasi').hide();          
+            $('#id_deflt').hide();
+        }
+    });
+ 
+    $('input:radio[value="solar"]').click(function() {
+        if($(this).is(":checked")) {
+            $('#id_nakshatram').show();
+            $('#id_rasi').show();
+            $('#id_tithi').show();
+            $('#id_paksham').hide();
+            $('#id_maasam').hide();
+            $('#id_deflt').hide();
+          
+        }
+    });
+
+    var inthenameof = document.getElementById("inthenameofdonor").checked;
+    if (inthenameof)
+    {
+       $("#id_others").hide();
+    }
+
+    if($('form input[type=radio]:checked').val() == "donor") {
+        $('#id_gotram').show();
+        $('#id_occasion').show();
+        $('#id_others').hide(); 
+        document.getElementById("name").value = '{{memdata.name}}';
+        document.getElementById("name").readOnly = true;
+        document.getElementById("gotram").value = '{{memdata.gotram}}';
+        document.getElementById("gotram").readOnly = true;
+    }
+                
+    if($('form input[type=radio]:checked').val() == "others") {
+        document.getElementById("name").value = "";
+        document.getElementById("name").readOnly = false;
+        document.getElementById("gotram").value = "";
+        document.getElementById("gotram").readOnly = false;
+        $('#id_gotram').show();
+        $('#id_occasion').show();
+        $('#id_others').show();
+    }
+
+    $('input:radio[value="donor"]').click(function() {
+        if($(this).is(":checked")) { 
+            document.getElementById("name").value = '{{memdata.name}}';
+            document.getElementById("name").readOnly = true;
+            document.getElementById("gotram").value = '{{memdata.gotram}}';
+            document.getElementById("gotram").readOnly = true;
+            $('#id_gotram').show();
+            $('#id_occasion').show();
+            $('#id_others').hide();
+        }
+    });
+ 
+    $('input:radio[value="others"]').click(function() {
+        if($(this).is(":checked")) {
+            document.getElementById("name").value = "";
+            document.getElementById("name").readOnly = false;
+            document.getElementById("gotram").value = "";
+            document.getElementById("gotram").readOnly = false;
+            $('#id_gotram').show();
+            $('#id_occasion').show();
+            $('#id_others').show();
+          
+        }
+    });
+  
+    var isvalid = document.getElementById("isvalid").checked;
+    if(!isvalid)
+    {
+      isvalid.checked = false;
+    }
+    else {
+      isvalid.checked = true;
+    }
+     
+function Validate()
+{
+    var e = document.getElementById("oid");
+    var oid = e.options[e.selectedIndex].value;
+
+    var oid1 = e.options[e.selectedIndex].text;
+    var e1 = document.getElementById("sid");
+    var sid = e1.options[e1.selectedIndex].value;
+    var sid1 = e1.options[e1.selectedIndex].text;
+  
+    if(oid == '')
+    {
+        alert("Please select organisation");
+        return false;
+    }
+    else if(sid == '')
+    {
+        alert("Please select SevaCategory");
+        return false;
+    }
+
+    $('#seva_form').submit();
+    return true;
+}
+
+
+</script>
+{% endblock javascripts %}
+
+

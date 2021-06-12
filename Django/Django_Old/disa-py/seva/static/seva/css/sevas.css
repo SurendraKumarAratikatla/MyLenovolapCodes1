@@ -1,0 +1,215 @@
+.subscriptions label {
+    width: 69px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    color: #598ede;
+}
+
+/* To provide cursor pointer to DONOR label */
+th.name-sort:hover {
+    cursor: pointer;
+    color: #149bdf;
+}
+
+/* To provide cursor pointer to PLACE label */
+th.place-sort:hover {
+    cursor: pointer;
+    color: #149bdf;
+}
+
+.seva-tile:hover {
+    cursor: pointer;
+}
+
+.seva-tile-print-preview .remove {
+    display: none;
+}
+
+.seva-tile-print-preview:hover .remove {
+    display: block;
+    position: relative;
+}
+
+.seva-tile-print-preview:hover .remove .icon-remove {
+    position: absolute;
+    left: -10px;
+    top: -5px;
+    cursor: pointer;
+}
+
+.seva-tile-print-preview.prasadamDispatch,
+.seva-tile-print-preview.emailCardIssueList,
+.seva-tile-print-preview.dailySevaKarta {
+    float: left;
+    page-break-inside: avoid;
+}
+
+.seva-tile-print-preview.prasadamDispatch .box {
+    border: none;
+    margin: 5px;
+}
+
+
+.seva-tile-print-preview.emailCardIssueList .box {
+    font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 170px;
+    width: 300px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.seva-tile-print-preview.dailySevaKarta .box {
+    font-weight: bold;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 150px;
+    width: 280px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.seva-tile-collection-print-preview.emailCardIssueList,
+.seva-tile-collection-print-preview.dailySevaKarta {
+    width: 720px;
+}
+
+.seva-tile-collection-print-preview.emailCardIssueList {
+    height: 190px;
+}
+
+.seva-tile-print-preview.prasadamDispatch h1 {
+    font-size: 1.9em;
+    line-height: 20px;
+}
+
+.seva-tile-print-preview.prasadamDispatch h2 {
+    font-size: 1.5em;
+    line-height: 16px;
+}
+
+.seva-tile-print-preview.prasadamDispatch h3 {
+    font-size: 1.17em;
+    line-height: 1.8em;
+}
+
+.seva-tile-print-preview.prasadamDispatch h4 {
+    font-size: 1.12em;
+    line-height: 1.2em;
+    margin: 5px 0;
+}
+
+.seva-tile-print-preview.prasadamDispatch h5 {
+    font-size: 0.82em;
+    line-height: 0.9em;
+}
+
+.seva-tile-print-preview.prasadamDispatch h6 {
+    font-size: 0.75em;
+    line-height: 0.8em;
+}
+
+.seva-tile-print-preview {
+    font-size: 14px;
+}
+
+.seva-tile-print-preview hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.seva-tile:hover .seva-tile-actions {
+    background-color: #ECECEC;
+}
+
+.seva-tile .seva-tile-actions .seva-tile-actions-list {
+    display: none;
+}
+
+.seva-tile:hover .seva-tile-actions .seva-tile-actions-list {
+    display: block;
+}
+
+.seva-tile small+span {
+    text-transform:capitalize;
+}
+
+
+/* To edit subscription details*/
+.edit {
+    cursor: pointer;
+}
+
+/*End see more content css*/
+
+/*Start subscription in line edit css script */
+.subscription-data:hover {
+    background-color: #eeeeee;
+}
+
+.subscription-data:hover .edit-field {
+    display: block;
+    cursor: pointer;
+}
+
+.edit-field {
+    display: none;
+}
+
+/*For Inline save and cancel*/
+.cancel-field {
+    cursor: pointer;
+}
+
+.save-field {
+    cursor: pointer;
+}
+
+/*To provide font size to donor name in seva tile*/
+.donor-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/*To change donor name colour while hover on donor name in seva tile*/
+div:hover.donor-name {
+    text-decoration: none;
+    color: #0088cc;
+}
+
+.control-group .edit-field {
+    display: none;
+}
+
+.control-group:hover .edit-field {
+    display: inline-block;
+    cursor: pointer;
+}
+
+/*To remove add address button in seva detail page*/
+.main-header h4 button.add-address{
+    display: none;
+}
+
+/*To remove background colour for seva name in seva details*/
+.seva-detail li.seva-details-tile div h4 {
+    background-color: #ffffff;
+}
+
+.seva-details-tile .edit-seva,
+.seva-details-tile:hover .edit-seva {
+    display: block;
+    padding-right: 5px;
+    position: relative;
+    top: -45px;
+}
+
+.seva-details-tile:hover .edit-seva {
+    cursor: pointer;
+}
+

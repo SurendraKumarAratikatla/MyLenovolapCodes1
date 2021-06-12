@@ -1,0 +1,278 @@
+{% load staticfiles %}
+{% load bootstrap %}
+{% if not seva_list %}
+
+<h3 xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">No Sevas</h3>
+{% else %}
+    <div class="pull-right print-all">
+        <label class="checkbox" style="font-size:16px;position:relative;top:40px;">
+            <input type="checkbox" name="print-seva-all"> Select all
+        </label>
+    </div>
+<table class="table sevas" border="0" width="100%">
+    <thead>
+    <tr>
+        <th colspan="2" class="name-sort" style="text-align :center" title="Sort">Donor</th>
+        <th class="place-sort" title="Sort">Place</th>
+        <th width="105px">In The Name Of</th>
+        <th width="68px">Seva Date</th>
+        <th>Address
+        {#% if export %#}
+        <span class="pull-right">
+        	{% if not month_input %}
+            	<a href="{% url 'export-seva-search' %}?sid={{sid}}&from={{from_date}}&to={{to_date}}&" class="btn btn-primary btn-mini" name="export" style="margin-right:80px;"><i class="icon-download-alt"></i> &nbsp;Export</a>
+            {% else %}
+            	<a href="{% url 'export-seva-search' %}?sid={{sid}}&month_input={{month_input}}&" class="btn btn-primary btn-mini" name="export" ><i class="icon-download-alt"></i> &nbsp;Export</a>
+            {% endif %}	
+        </span>
+        {#%endif%#}
+        </th>
+            </tr>
+    </thead>
+    <tbody class="seva-tile-collection">
+    {% for seva in seva_list %}
+        <tr class="seva-tile" data-id="{{ seva.id }}">
+            <td style="width:100px;">
+                <div>
+                    <img src="{% static 'img/user.jpg' %}" width="100px" height="100px" alt="image" >
+                </div>
+            </td>
+            <td>
+                <div><span>MID#{{ seva.mid.mid }}</span>, <span> {{ seva.ssid }}</span></div>
+                <div title="Click to see member details" class="donor-name member-details">
+                    {{ seva.mid.name }} {{seva.mid.surname}}
+                </div>
+            </td>
+            <td style="position:relative;">
+                <i class="icon-map-marker" style="position:absolute;top:10px;left:-5px;" title="Place"></i>
+                <span style="text-transform:capitalize;" title="Place">{{ seva.mid.place }}</span>
+            </td>
+            <td style="width:200px;">
+                {% if seva.inthenameof == 'donor' or seva.inthenameof == 'Donor' %}
+                    <div>
+                        {% if seva.mid.salutation %} {{seva.mid.salutation}} {%else%}Sri{%endif%}
+                        {{seva.mid.name}} {{seva.mid.surname}}
+                    </div>
+
+                    {% if seva.mid.gotram %}
+                    <div class="muted" style="text-transform:capitalize;">
+                        <span title="Gotram"><i class="fa fa-anchor"></i>  {{seva.mid.gotram}}</span>
+                    </div>
+                    {%endif%}
+
+                    {% if seva.mid.nakshatram %}
+                        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> {{seva.mid.nakshatram}}</span></div>
+                    {%endif%}
+                {%else%}
+                    <div style="text-transform:capitalize;">{{seva.inthenameof}}</div>
+                       {% if seva.gotram %}
+                    <div class="muted" style="text-transform:capitalize;">
+                        <span title="Gotram"><i class="fa fa-anchor"></i>  {{seva.gotram}}</span>
+                    </div>
+                    {%endif%}
+                    {% if seva.nakshatram %}
+                        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> {{seva.nakshatram}}</span></div>
+                    {%endif%}
+                {%endif%}
+
+                   {% if seva.occasion %}
+                    <div class="muted" style="text-transform:capitalize;"><span title="Occasion"><i class="fa fa-gift"></i> {{seva.occasion}}</span></div>
+                   {%endif%}
+            </td>
+            <td>
+                {{ seva.sevadate | cus_date | date:"d M"}}
+            </td>
+            <td class="muted" style="width:300px;">
+                {%if seva.mid.full_address %}
+                            {% with ad=seva.mid.full_address %}
+                            <div {% if not ad.is_valid %} style="background-color: red;" {% endif %}>
+                            <div>{{ad.address}}</div>
+                            <div>{{ad.city| add:","}} {% if ad.country == 'india' and ad.country == 'India' %}{{ad.district| add:","}}
+                                {% endif %}
+                            </br>{{ad.state}}
+                            </div>
+                            <div>{{ad.country| add:","}} {{ad.pin| add:"."}}</div>
+                            </div>
+                            {% endwith %}
+                            {% endif %}
+                <div style="margin-top:5px;">
+                    <span title="Email"><i class="icon-envelope"></i> {{ seva.mid.email }}</span>
+                </div>
+                <div>
+                    <span style="margin-right:10px;" title="Phone"><i class="fa fa-phone"></i>{{ seva.mid.phone }}</span>
+                    <span title="Mobile"><i class="fa fa-mobile"></i>{{ seva.mid.mobile }}</span>
+                </div>
+            </td>
+            {% if not export %}
+            <td class="seva-tile-actions" style="width:60px;">
+                <div class="seva-tile-actions-list details">
+                    <small><a href="{% url 'member-view' seva.mid.id %}">
+                        <i class="icon-eye-open seva-details pull-left" style="position:relative;top:2px;">
+
+                    </i>
+                    Details</a></small>
+                </div>
+            </td>
+            {%endif%}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<div id="previewhtml" class="hide">
+
+<div id="view-prasadamDispatch" class="hide">
+
+    <div class="seva-tile-collection-print-preview prasadamDispatch">
+    {% for seva in seva_list %}
+    <div class="seva-tile-print-preview prasadamDispatch {{ seva.id }} hide">
+
+    <div class="box">
+        <table border="1">
+            <tr>
+                <td style="padding:12px;">
+                    <div class="no-print remove pull-right"><i class="icon-remove"></i></div>
+                    <div style="clear:both;"></div>
+                    <h1 align="center">Avadhoota Datta Peetham<br/></h1>
+
+                    <h2 align="center">Sri Ganapati Sachchidananda Ashram<br/></h2>
+
+                    <div align="center">
+                        Datta Nagar, Ooty Road, Mysore 570025 India<br/>
+                        Tel: 0821- 2486486 Fax: 2487487<br/>
+                        <span class="muted">Email:</span> mail@dattapeetham.com <span class="muted">Website:</span> www.dattapeetham.com
+                        <hr/>
+                    </div>
+                    <h4 align="center">Prasadam for Shashwata Seva</h4>
+                    <div style="width: 350px;">
+                        <b>To<br/>
+                            MID#{{seva.mid.mid }}, {{seva.ssid}}<br/>
+                            {% if seva.mid.salutation %}
+                            {{seva.mid.salutation}}
+                            {% else %}
+                            Sri
+                            {% endif %}
+                            {{seva.mid.name}} {{seva.mid.surname }}<br/>
+                        </b>
+                        <b>
+                            {%if seva.mid.full_address %}
+                            {% with ad=seva.mid.full_address %}
+                            <div>{{ad.address}}</div>
+                            <div>{{ad.city| add:","}} {% if ad.country == 'india' and ad.country == 'India' %}{{ad.district| add:","}}
+                                {% endif %}
+                            </br>{{ad.state}}
+                            </div>
+                            <div>{{ad.country| add:","}} {{ad.pin| add:"."}}</div>
+                            {% endwith %}
+                            {% endif %}
+                            
+                        </b>
+                    </div>
+
+                    <div align="center"> -------------------------------------------------------------------------</div>
+                    <span size="3">
+                        Dear Devotee!<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jaya Guru Datta<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are pleased to inform you that Daily Seva/Puja was performed in <br/>
+                        Dattatreya Temple and other temples in Datta Peetham, along with Daily<br/>
+                        Homa, Gopuja and Maha Naivedyam on {% if seva.islunar %}{{seva.sevadate | cus_date | date:"d N" }}{% else %} {{seva.sevadate | cus_date | date:"d N"}}{% endif %}
+                        {% if seva.occasion %} {{seva.occasion}} {% endif %}
+                        .<br/>
+                        <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kindly find the enclosed Prasadam for the Seva.<br/>
+                        <br/>
+                        In Sadguru Seva<br/>
+                        <br/>
+                        <br/>
+                        Authorised Signatory – Seva Counter<br/>
+                    </span>
+                    <hr/>
+                    <span size="3">For any clarification/ request kindly write to <u><span
+                                    color="blue">vkg@dattapeetham.com</span></u></span>
+                </td>
+            </tr>
+        </table>
+    </div></div>
+    {% endfor %}
+</div>
+</div>
+
+<div id="view-dailySevaKarta" class="hide">
+    <div class="seva-tile-collection-print-preview dailySevaKarta">
+    {% for seva in seva_list %}
+        <div class="seva-tile-print-preview dailySevaKarta {{ seva.id }} hide   ">
+        <div class="box">
+            <span class="no-print remove pull-right"><i class="icon-remove"></i></span>
+            MID#{{seva.mid.mid }}, {{seva.ssid}}<br/>
+            {% if seva.mid.salutation %}
+            {{seva.mid.salutation}}
+            {% else %}
+            Sri
+            {% endif %}
+            {{seva.mid.name}} {{seva.mid.surname }}<br/>
+
+            {% if seva.mid.place %}
+            <div><span title="Place"><i class="fa fa-map-marker"></i> {{seva.mid.place}}</span></div>
+            {% endif %}
+            <span style="text-transform:capitalize;" title="In the name of"><i class="fa fa-user-md"></i>
+            <span class="muted" style="font-size: smaller;"> In The Name Of: </span>  {{ seva.inthenameof }}
+            </span><br/>
+            {% if seva.inthenameof == 'donor' or seva.inthenameof == 'Donor'  %}
+                {% if seva.mid.gotram %}
+                <div><span style="text-transform:capitalize;" title="Gotram"><i class="fa fa-anchor"></i> {{ seva.mid.gotram }} </span></div>
+                {% endif %}
+                {% if seva.mid.nakshatram %}
+                <div><span style="text-transform:capitalize;" title="Nakshatram"><i class="fa fa-star"></i> {{ seva.mid.nakshatram }}</span></div>
+                {% endif %}
+            {% else %}
+                {% if seva.gotram %}
+                <div><span style="text-transform:capitalize;" title="Gotram"><i class="fa fa-anchor"></i> {{seva.gotram}}</span></div>
+                {% endif %}
+                
+                {% if seva.nakshatram %}
+                <div><span style="text-transform:capitalize;" title="Nakshatram"><i class="fa fa-star"></i> {{ seva.nakshatram}} </span></div>
+                {% endif %}
+            {% endif %}
+            {% if seva.sevadate %} <div><span title="Seva Date"><i class="fa fa-calendar"></i> {{ seva.sevadate | cus_date | date:"d N" }} </span></div>{% endif %}
+            {% if seva.occasion %}<div><span title="Occasion" style="text-transform:capitalize;"><i class="fa fa-gift"></i> {{ seva.occasion }}</span></div>{% endif %}
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div id="view-emailCardIssueList" class="hide">
+<div class="seva-tile-collection-print-preview emailCardIssueList">
+    {% for seva in seva_list %}
+    <div class="seva-tile-print-preview emailCardIssueList {{ seva.id }} hide">
+    <div class="box">
+        <span class="no-print remove pull-right"><i class="icon-remove"></i></span>
+            MID#{{seva.mid.mid }}, {{seva.ssid}}<br/>
+            {% if seva.mid.salutation %}
+            {{seva.mid.salutation}}
+            {% else %}
+            Sri
+            {% endif %}
+            {{seva.mid.name}} {{seva.mid.surname }}<br/>
+
+            {% if seva.mid.place %}
+            <div><span title="Place"><i class="fa fa-map-marker"></i> {{seva.mid.place}}</span></div>
+            {% endif %}
+            <div>---------------------------</div>
+            <div>
+                <span style="text-transform:capitalize;" title="In the name of"><i class="fa fa-user-md"></i>
+                <span class="muted" style="font-size: smaller;"> In The Name Of: </span>  {{ seva.inthenameof }}
+                </span>
+            </div>
+            {% if seva.sevadate %} <div><span title="Seva Date"><i class="fa fa-calendar"></i> {{ seva.sevadate | cus_date | date:"d N" }} </span></div>{% endif %}
+            {% if seva.occasion %}<div><span title="Occasion" style="text-transform:capitalize;"><i class="fa fa-gift"></i> {{ seva.occasion }}</span></div>{% endif %}
+
+            {% if seva.mid.email and seva.mid.email %}
+        <div><span title="Email" style="text-transform:capitalize;"><i class="fa fa-envelope"></i> {{seva.mid.email }}</span></div>
+        {% endif %}
+    </div>
+    </div>
+    {% endfor %}
+</div>
+</div>

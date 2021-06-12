@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Chaandra Maana Report</h1>
+        </div>
+        <div class="section">
+            <div class=" form-inline center">
+                <select id="seva_category" name="seva_category">
+                    <option value="" selected="selected">---Select Seva Category---</option>
+                    {% for seva in sevas %}
+                        <option value="{{ seva.id }}">{{ seva.name|capfirst }}</option>
+                    {% endfor %}
+                </select>
+                <select id="maasam" name="maasam" class="input-medium">
+                    <option value="">--Select Maasam--</option>
+                    {% for maasam in maasams %}
+                    <option value="{{maasam.maasam}}">{{maasam.maasam|capfirst}}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-success" name="get_maasam_sevas" style="margin-left:5px;" onclick="update_seva_maasamwise();" > Get Report
+                </button>
+                <span class="loader hide">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <div id="seva-maasam-search"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+
+<script type="text/javascript">
+
+function update_seva_maasamwise() {
+    var maasam = $("#maasam").val();
+    var sid = $('#seva_category').val();
+    $.ajax({
+        url: "{% url 'seva-maasam-search' %}",
+        dataType: "html",
+        data:{sid: sid, maasam: maasam, export:'yes'},
+        success: function(result) {
+            $("#seva-maasam-search").html(result);
+            $(".loader").addClass("hide");
+        },
+        error: function() {}
+    });
+}
+
+</script>
+{% endblock javascripts %}

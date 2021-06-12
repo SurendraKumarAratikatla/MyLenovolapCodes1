@@ -1,0 +1,125 @@
+{% load permission_tags %}
+<div id="header">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="{% url 'home' %}">DISA</a>
+                {% if request.user.is_authenticated %}
+                <div class="nav-collapse" xmlns="http://www.w3.org/1999/html">
+                    <ul class="nav">
+                        {% if user.is_superuser == False %}
+                        {% if user|can:'VIEW_SELF_DETAILS' and user.mid %}
+                        <li><a href="{% url 'profile-view' %}">Member Profile</a></li>
+                        {% endif %}
+                        {% endif %}
+                        
+                        {% if user.roles == 'ROLE_ADMIN' or user.roles == 'ROLE_STAFF' %}    
+                        {% if user|can:'VIEW_ORGANISATION' %}
+                        <li><a href="{% url 'organisation' %}">Organisations</a></li>
+                        {% endif %}
+                        
+                        {% if user|can:'VIEW_SEVA_CATEGORY' %}
+                        <li><a href="{% url 'seva-cat' %}">Seva Categories</a></li>
+                        {% endif %}
+                       
+                        {% if user|can:'VIEW_MEMBER_DETAILS' %}
+                        <li><a href="{% url 'members' %}">Members</a></li>
+                        {% endif %}
+
+
+                        {% if user|can:'EXPORT_REPORTS' %}
+                        <li><a href="{% url 'reports_awardee' %}">Awardees</a></li>
+                        {% endif %}
+
+                        {% if user|can:'SEND_CUSTOM_MESSAGE' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Communication <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'email' %}">Email</a></li>
+                                <li><a href="{% url 'sms' %}">SMS</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+
+                        {% if user|can:'EXPORT_REPORTS' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Reports <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'reports_seva_templates' %}">Seva Templates</a></li>
+                                <li><a href="{% url 'reports_seva' %}">Seva Info Export </a></li>
+                                <li><a href="{% url 'reports_location' %}">Members By Location</a></li>
+                                <li><a href="{% url 'reports_monthly' %}">Monthly Report</a></li>
+                                <li><a href="{% url 'reports_awardee' %}">Awardees Report</a></li>
+                                <li><a href="{% url 'reports_maasam' %}">Chaandra Maana Reports</a></li>
+
+                            </ul>
+                        </li>
+                        {% endif %}
+
+                        {% if user|can:'EXPORT_DB' %}
+                        <li><a href="#">Export DB</a></li>
+                        {% endif %}
+
+                        {% if user|can:'EXPORT_DB' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Import <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'import-group' %}">Import Group </a></li>
+                                <li><a href="{% url 'group-view' %}">Contact Group View </a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+
+                        {% endif %}
+
+                        {% if user|can:'ACCESS_CONTROL'%}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Access <b
+                                    class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'user-access' %}">Manage Member Access </a></li>
+                                <li><a href="{% url 'add-user' %}">Add User </a></li>
+                                <li><a href="{% url 'admin:index' %}">Admin Site </a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a href="javascript:" class="dropdown-toggle pull-right" data-toggle="dropdown">{{request.user.username}}
+                                <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'logout' %}">
+                                        logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                {%else%}
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        <li><a class="brand" href="{% url 'login' %}">Login</a></li>
+                    </ul>
+                </div>
+                {%endif%}
+                <!-- nav-collapse -->
+            </div>
+        </div>
+        <!-- /navbar-inner -->
+    </div>
+</div>

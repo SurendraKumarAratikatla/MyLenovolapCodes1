@@ -1,0 +1,4 @@
+<option>--Select Seva Category--</option>
+{% for seva_cat in seva_cat_list %}
+    <option value="{{ seva_cat.id }}">{{ seva_cat.name|capfirst }}</option>
+{% endfor %}

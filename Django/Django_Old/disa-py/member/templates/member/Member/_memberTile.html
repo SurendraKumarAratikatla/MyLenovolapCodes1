@@ -1,0 +1,46 @@
+{% autoescape on %}
+<script type="text/template" id="memberTileTpl">
+    <div class="member-tile member-search-result thumbnail hover">
+        <div class="row">
+            <div class="col-xs-4 member-photo">
+                <img src="<% if(photo){ %><%=photo%><%}else{%>/img/user.jpg<% } %>" class="img-responsive">
+            </div>
+            <div class="col-xs-8 member-summary">
+                <div>
+                    <span class="label label-info"><%= mid%></span>
+                    <span class="hover-show">
+                            <span class="view-member" style="margin-left: 10px;overflow: hidden;">
+                                <a><i class="glyphicon glyphicon-eye-open view-details"></i>
+                                    View</a>
+                            </span>
+                            <span class="edit-member" style="margin-left: 10px;">
+                                <a><i class="glyphicon glyphicon-edit edit-member-details"
+                                      style="margin-right: 4px;"></i>Edit</a>
+                            </span>
+                    </span>
+                </div>
+                <div style="font-weight:bold;">
+                    <% if(salutation){ %><%=salutation%><%}else{ %>Sri<% } %>
+                    <%=name%> <%=surname%>
+                </div>
+                <% if(place){%>
+                <div><span title="Place"><i class="icon-map-marker"></i> <%= place %></span></div>
+                <% } %>
+                <%if(email){ %>
+                <div><span title="Email"><i class="icon-envelope"></i> <%= email %></span></div>
+                <% } %>
+                <div>
+                    <% if(mobile) { %><span title="Mobile"><i class="icon-mobile-phone"></i> <%= mobile %></span><%
+                    } %>
+                    <% if(mobile && phone){%>,
+                    <%}%>
+                    <% if(phone) { %><span title="Phone"><i class="icon-phone"></i> <%= phone%></span><% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+{% endautoescape %}
+
+{#<a href="/member/<%= id%>" title="View member profile"></a>#}

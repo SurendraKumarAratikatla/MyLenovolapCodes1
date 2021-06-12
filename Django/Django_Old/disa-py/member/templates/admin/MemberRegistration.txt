@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Your membership is successfully registered at Datta Peetham. 
+Please contact adp@sgsdatta.org, as needed with this MID#{{mid}}.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham

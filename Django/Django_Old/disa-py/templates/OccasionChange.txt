@@ -1,0 +1,1 @@
+message=Dear%20%23field1%23%2C%0AJaya%20Guru%20Datta%0A%0AYour%20mobile%20is%20successfully%20updated%20in%20the%20ADP%20Register.%20If%20you%20have%20not%20requested%2C%20contact%20adp%40sgsdatta.org%20immediately.%0A%0AWith%20Best%20Regards%0AIn%20Sadguru%20Seva%0AService%20Team%2C%20SGS%20Ashrama%0AAvadhoota%20Datta%20Peetham.

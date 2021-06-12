@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Your address is successfully updated in the ADP Register. 
+If you have not requested, contact adp@sgsdatta.org immediately.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham.

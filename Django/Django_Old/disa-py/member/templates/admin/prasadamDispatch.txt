@@ -1,0 +1,10 @@
+Dear {{name}},
+Jaya Guru Datta
+
+Your Shashwata Seva was performed at Datta Peetham yesterday. 
+Prasadam is mailed to your registered address.
+
+With Best Regards
+In Sadguru Seva
+Team - Shashwata Seva
+Avadhoota Datta Peetham.

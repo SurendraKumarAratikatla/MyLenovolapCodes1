@@ -1,0 +1,1 @@
+message=Dear%20%23field1%23%2C%20%0AJaya%20Guru%20Datta%0A%0AYour%20%23field2%23%20was%20performed%20at%20Datta%20Peetham%20is%20mailed%20to%20your%20registered%20address.%0A%0AWith%20Best%20Regards%0AIn%20Sadguru%20Seva%0AService%20Team%2C%20SGS%20Ashrama%0AAvadhoota%20Datta%20Peetham.

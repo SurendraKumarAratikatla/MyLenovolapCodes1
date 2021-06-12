@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/jackedup.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="member-details-main">
+            <div class="page-header">
+                <h1>Member Details</h1>
+            </div>
+            <div class="section row">
+                <div class="col-md-7 span7">
+                    <div class="member-details">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-4 center span2">
+                                    <div class="thumbnail member-photo">
+                                        <img src="{% if mem.photo %}{{mem.photo}}{%else%}{% static 'img/user.jpg' %} {%endif%}" class="img-responsive">
+                                    </div>
+                                    <div style="margin-top:10px;" id="file-uploader-view54">
+                                        <div class="qq-uploader">
+                                            <div class="qq-upload-drop-area" style="display: none;"><span>Drop files here to upload</span>
+                                            </div>
+                                            <form id="image-upload" enctype="multipart/form-data" action="{% url 'member-image-upload' mem.id %}" method="POST">
+                                                {% csrf_token %}
+                                            <div class="qq-upload-button btn"
+                                                 style="position: relative; overflow: hidden; direction: ltr;">Upload
+                                                image<input type="file" name="file"
+                                                            accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|images/*"
+                                                            style="position: absolute; right: 0px; top: 0px; font-family: Arial; font-size: 118px; margin: 0px; padding: 0px; cursor: pointer;">
+                                            </div>
+                                            </form>
+                                            <ul class="qq-upload-list"></ul>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:10px;">
+                                         <a href="/admin/members/0fa5cb7f-112d-4ca8-b427-1db0b86da878/awardee/new">Add award</a>
+                                    </div>
+                                    <div style="margin-top:10px;">
+                                         <a href="{% url 'add-relationship' mem.id %}">Add Relationship</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8 span5" data-original-title="" title="">
+                                    <div class="content-padding">
+                                        <div>
+                                            <h4>
+                                                <span class="label label-info" title="Member Id">MID#{{mem.mid}}</span>
+                        <span class="pull-right edit-member">
+                            <small><a href="{% url 'member-edit' mem.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                        </span>
+                                            </h4>
+                                        </div>
+                                        <div style="padding-bottom: 5px;">
+                                            <h4>
+
+                                                Sri
+
+                                                {{mem.name}}
+
+                                                {{mem.surname}}
+
+                                            </h4>
+
+                                            <div style="margin-top:-2px;">
+                                                <span title="Place" style="text-transform:capitalize;"><i
+                                                        class="fa fa-fw fa-map-marker"></i> {{mem.place}}</span>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div>
+                                            {% if mem.email %}
+                                            <span title="Email"><i class="fa fa-fw fa-envelope"></i> {{mem.email}}</span>
+                                            {% endif %}
+                                        </div>
+
+
+                                        <div>
+                                            {% if mem.mobile %}
+                                            <span title="Mobile"><i class="fa fa-fw fa-mobile"></i> {{mem.mobile}}</span>
+                                            {% endif %}
+                                        </div>
+
+
+                                        <div>
+                                            {% if mem.phone %}
+                                            <span title="Phone"><i class="fa fa-fw fa-phone"></i> {{mem.phone}}</span>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            {% if mem.gotram %}
+                                            <span title="Gotram" style="text-transform:capitalize;"><i class="fa fa-fw fa-anchor"></i>{{mem.gotram }}</span>
+                                            {% endif %}
+                                            {% if mem.nakshatram %}
+                                            <span title="Nakshatram" style="text-transform:capitalize;">,<i class="fa fa-fw fa-star"></i>{{mem.nakshatram }}</span>
+                                            {% endif %}
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="section">
+                                        <div class="main-header">
+                                            <h4>Address
+                                            <span class="pull-right add-address">
+                                            <small><a href="{% url 'member-address' mem.id %}"><i class="fa fa-fw fa-plus"></i>Add</a></small>
+                                            </span>
+                                            </h4>
+                                        </div>
+                                        <div class="member-addresses">
+                                            <div class="address-tile-collection row">
+                                                {%for ad in address_list%}
+                                                <div class="address-tile col-xs-12">
+                                                    <div class="section box-border-bottom content-padding hover {% if not ad.is_valid %} alert-danger alert {% endif %}">
+                                                        <div class="pull-right edit-address hover-show">
+                                                            <small><a href="{% url 'member-address-edit' mem.id ad.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                        </div>
+                                                        <div class="pull-left">
+                                                            {% if not ad.is_valid %}
+                                                            <div style="margin: 10px 0;"><strong>Invalid Address !!</strong></div>
+                                                            {% endif %}
+                                                            <div>{{ad.address}}</div>
+                                                            <div>{{ad.city| add:","}}{{ad.district| add:","}}{{ad.state}}
+                                                            </div>
+                                                            <div>{{ad.country}} {{ad.pin}}</div>
+                                                            <div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                        <div style="margin-top:10px;">
+                                                           <a href="{% url 'medicalprofile' mem.id %}">Medical Profile</a>
+                                                       </div>
+                                                </div>
+                                                {%endfor%}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="member-awards"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 span5">
+                    <div class="seva-details">
+                        <div>
+                            <div class="main-header">
+                                <h4>Seva List
+                                   {% if user|can:'ADD_MEMBER_SEVAS' %}
+                                   <span class="pull-right add-seva">
+                                   <small><a href="{% url 'add-seva' mem.id %}"><i class="fa fa-fw fa-plus"></i>Add</a></small>
+                                   </span>
+                                   {% endif %}
+                                </h4>
+                            </div>
+                            <div class="row">
+                               <div class="form-horizontal">
+                                   <div class="seva-details">
+                                       <div class="seva-collection row">
+                                            <div class="seva-details-tile col-xs-12">
+                                                <div class="section box-border-bottom hover seva-tile content-padding">
+                                                    <div>
+                                                      {% for seva in sevas %}
+                                                      <h4>
+                                                        <span class="label label-info" title="Seva Id">{{seva.ssid}}</span>
+                                                        <span class="pull-right edit-seva hover-show">
+                                                        <small><a><a href="{% url 'edit-seva' seva.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                        </span>
+                                                      </h4>
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                                {% for sevaCategory in sevaCategories %}
+                                                                    {% if seva.id and sevaCategory.id == seva.sid.id %}  
+                                                                        <span style="margin-left:10px;">{{sevaCategory.name}}</span>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                <small class="muted">(Avadhoota Datta Peetham, Mysore)
+                                                                </small>
+                                                            </h4>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Save in the name of">
+                                                                {% if seva.inthenameof == 'Donor' or seva.inthenameof == 'donor' %}
+                                                                <span>
+                                                                  <i class="fa fa-user fa-fw"></i> <small>In name of:</small>
+                                                                </span>
+                                                                Donor
+                                                               {% elif seva.inthenameof != 'Donor' and seva.inthenameof != 'donor' %} 
+                                                                <span>
+                                                                  <i class="fa fa-user fa-fw"></i> <small>In name of:</small>
+                                                                </span>
+                                                                {{ seva.inthenameof }}
+                                                               {% endif %}
+                                                            </span>
+                                                        </div>
+
+                                                        <div>
+                                                            {% if seva.sevadatestd %}
+                                                            <span title="Seva Date"><i class="fa fa-fw fa-calendar"></i>{{seva.sevadatestd| cus_date | date:"d F"}}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    
+                                                        <div>
+                                                            {% if seva.inthenameof != 'Donor' and seva.inthenameof != 'donor' %}
+                                                            <span title="Seva Gotram"><i class="fa fa-fw fa-anchor"></i>{{seva.gotram}}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div>
+                                                            {% if seva.inthenameof != 'Donor' and seva.inthenameof != 'donor' %}
+                                                               {% if seva.nakshatram %}
+                                                            <span title="Nakshatram"><i class="fa fa-fw fa-star"></i>{{seva.nakshatram}}</span>
+                                                               {% endif %}
+                                                            {% endif %}
+                                                        </div>
+                                                        <div style="position:relative;">
+                                                           {% if seva.inthenameof != 'Donor' and seva.inthenameof != 'donor' %}
+                                                           <span title="Donor">
+                                                               <i class="fa fa-fw fa-rupee" style="margin-right: 9px;"></i>
+                                                               <i  class="fa fa-user fa-fw" style="font-size: 10px;position: absolute;color:gray;left: 7px;top: 7px;"></i>
+                                                               <span style="font-size: smaller;">Donor:</span>
+                                                              {{mem.name}}
+                                                         </span>
+                                                         {% endif %}
+                                                        </div>
+                                                        <div>
+                                                           {% if seva.inthenameof != 'Donor' and seva.inthenameof != 'donor' %}
+                                                           <h4>Address </h4>
+                                                              {% for ad in sevaaddress_list %}
+                                                                {% if seva.id == ad.sid.id %} 
+                                                           <div>{{ad.address}}</div>
+                                                            <div><span title="City">{{ad.city}}</span>
+                                                                 <span title="District">,{{ad.district}}</span>
+                                                                 <span title="State">,{{ad.state}}</span>
+                                                            </div>
+                                                            <div><span title="Country">{{ad.country}} </span>
+                                                                 <span title="Pin">{{ad.pin}}</span>
+                                                            </div>
+                                                             {% endif %}
+                                                             {% endfor %}
+                                                            {% endif %}
+                                                         </div> 
+                                                        {% endfor %}
+                                                    
+                                                    </div><br /><br />
+
+                                               <div class="main-header">
+                                                   <h4>Membership List
+                                                   <span class="pull-right add-membership">
+                                                       <small><a href="{% url 'add-membership' mem.id %}"><i class="fa fa-fw fa-plus"></i>Add</a></small>
+                                                   </span>
+                                                   </h4>
+                                               </div>
+                                                    <div>
+                                                        {% if assetLands  %}
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                                {% for land in assetLands %}
+                                                            <span style="margin-left:10px;">Donor-LAND</span>
+                                                            <span class="pull-right edit-membership hover-show">
+                                                            <small><a><a href="{% url 'admin:member_assetland_change' land.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                           <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'add-membership' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+                                                            </h4>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Donated">
+                                                                {#% if land.description %#}
+                                                                <span>
+                                                                  <small>Donated</small>
+                                                                </span>
+                                                                {{land.description}}
+                                                               {#% endif %#}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Land registrar">{{land.sub_registrar}}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Land address">{{land.address}}</span>
+                                                        </div>
+
+                                                        {% endfor %}
+                                                     {% endif %}
+                                                    </div>
+
+                                                   <div>
+                                                        {% if assetBuildings  %}
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                                {% for building in assetBuildings %}
+                                                            <span style="margin-left:10px;">Donor-Building</span>
+                                                            <span class="pull-right edit-membership hover-show">
+                                                            <small><a><a href="{% url 'admin:member_assetbuilding_change' building.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                            <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'membership-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+
+                                                            </h4>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Description">
+                                                                {% if building.description %}
+                                                                <span>
+                                                                  <small>Donated</small>
+                                                                </span>
+                                                                {{building.description}}
+                                                               {% endif %}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Building Address">{{building.address}}</span>
+                                                        </div>
+
+                                                        {% endfor %}
+                                                     {% endif %}
+                                                    </div>
+
+                                                    <div>
+                                                        {% if assetEquipments  %}
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                                {% for equipment in assetEquipments %}
+                                                            <span style="margin-left:10px;">Donor-Equipment</span>
+                                                            <span class="pull-right edit-membership hover-show">
+                                                                <small><a><a href="{% url 'admin:member_assetequipment_change' equipment.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                                                            <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'membership-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+
+                                                            </h4>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Donated">
+                                                                {% if equipment.equipmentdescription %}
+                                                                <span>
+                                                                  <small>Donated</small>
+                                                                </span>
+                                                                {{equipment.equipmentdescription}}
+                                                               {% endif %}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span title="Equipment Procurement">{{equipment.procurementdate}}</span>
+                                                        </div>
+
+                                                        {% endfor %}
+                                                     {% endif %}
+                                                    </div>
+                                                     
+
+                                                    <div>
+                                                        {% if trustee  %}
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                               <span style="margin-left:10px;">Trustee</span>
+                                                               <span class="pull-right edit-seva hover-show">
+                                                                   <small><a><a href="{% url 'admin:member_trustee_change' trustee.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small></span>
+                                                               <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'membership-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+
+                                                            </h4>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                   <div>
+                                                        {% if honorary  %}
+                                                        <div>
+                                                            <h4>
+                                                            <i class="fa fa-fw fa-hand-o-right"></i>
+                                                            <span style="margin-left:10px;">Honorary</span>
+                                                            <span class="pull-right edit-seva hover-show">
+                                                                <small><a><a href="{% url 'admin:member_honorary_change' honorary.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small></span>
+                                                            <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'membership-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+
+                                                            </h4>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                 <div>
+                                                        {% if staffprofile  %}
+                                                        <div>
+                                                            <h4>
+                                                                <i class="fa fa-fw fa-hand-o-right"></i>
+                                                            <span style="margin-left:10px;">Inmate</span>
+                                                            <span class="pull-right edit-seva hover-show">
+                                                                <small><a><a href="{% url 'admin:member_staffprofile_change' staffprofile.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small></span>
+                                                             <span class="hover-show">
+                                                               <span class="view-membership" style="margin-left: 10px;overflow: hidden;">
+                                                                   <small><a href="{% url 'membership-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>View</a></small>
+                                                                </span>
+                                                          </span>
+
+                                                            </h4>
+                                                        </div>
+                                                        {% if staffprofile.duty %}
+                                                        <div>
+                                                            <span title="Duty">
+                                                                {{staffprofile.duty}}
+                                                            </span>
+                                                        </div>
+                                                        {% endif %}
+                                                        {% if staffprofile.department %}
+                                                        <div>
+                                                            <span title="Staff Department">{{staffprofile.department}}</span>
+                                                        </div>
+                                                        {% endif %}
+
+                                                        {% endif %}
+                                                    </div>
+
+                                                  </div>
+
+
+
+                                                        <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+          </div>
+         <!--</div>-->
+
+
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="{% static 'js/humane.min.js' %}"></script>
+<script type="text/javascript">
+var jacked = humane.create({baseCls: 'humane-jackedup', addnCls: 'humane-jackedup-success'})
+{% if request.GET.edit == '1' %}
+    jacked.log("Member details saved successfully.");
+{% elif request.GET.add == '1' %}
+    jacked.log("Member added successfully.");
+{% elif request.GET.edit == '2' %}
+    jacked.log("Seva details saved successfully.");
+{% elif request.GET.add == '2' %}
+    jacked.log("Seva added successfully.");
+{% elif request.GET.edit == '3' %}
+    jacked.log("Address details saved successfully.");
+{% elif request.GET.add == '3' %}
+    jacked.log("Address added successfully.");
+{% elif request.GET.image == '1' %}
+    jacked.log("Image updated successfully.");
+{% endif %}
+$(document).on("change","input[name='file']", function(){
+    
+$("#image-upload").submit();
+});
+</script>
+{% endblock %}

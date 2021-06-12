@@ -1,0 +1,7 @@
+.seva-category-action{
+    display: none;
+}
+
+.seva-category-tile:hover .seva-category-action{
+    display: block;
+}

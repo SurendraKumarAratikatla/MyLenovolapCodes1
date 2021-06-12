@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Organisations
+                {% if user|can:'ADD_ORGANISATION' %}
+                <span class="pull-right btn btn-success add" style="margin-top:12px;">
+                    <i class="icon-plus icon-white"></i> Add
+                </span>
+                {% endif %}
+            </h1>
+        </div>
+        <div class="section">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th style='text-align:center'>Name & Address</th>
+                    {% if user|can:'EDIT_ORGANISATION' %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for org in org_list %}
+                <tr>
+                    <td>{{org.code|upper}}</td>
+                    <td style='text-align:center'>
+                        <div><big>{{org.name}}</big></div>
+                        <div>{{org.address|add:","}} {{org.city|add:","}} {{org.state|add:","}} {{org.country|add:","}} {{org.pincode}}</div>
+                        <div>
+                            {%if org.mobile %}<i class="icon-mobile-phone"></i> {{org.mobile|add:","}}{%endif%}
+                            {%if org.phone %}<i class="icon-phone"></i> {{org.phone|add:","}}{%endif%}
+                            {%if org.fax %}<i class="icon-print"></i> {{org.fax}}{%endif%}
+                        </div>
+                        <div>
+                            {%if org.email %}<i class="icon-envelope"></i> {{org.email|add:","}}{%endif%}
+                            {%if org.website %}<span class="muted">Web:</span> {{org.website}}{%endif%}
+                        </div>
+                    </td>
+                    {% if user|can:'EDIT_ORGANISATION' %}
+                    <td width="50px">
+                        <div>
+                            <i class="icon-edit"></i>
+                            <a title="Edit Organisation details" href="{% url 'edit_org' org_id=org.id %}">Edit</a>
+                        </div>
+                    </td>
+                   {% endif %}
+                </tr>
+                {%empty%}
+                <tr>
+                    <td colspan="2">No Organisations found</td>
+                </tr>
+                {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}

@@ -1,0 +1,77 @@
+{% load staticfiles %}
+<div class="muted center">
+    <span class="result-count-value" style="font-weight: bold;">{{ result|length }}</span> results found
+</div>
+<div class="search-results-members">
+    <div class="member-tile-collection section row">
+        {% for mem in result %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="member-tile member-search-result thumbnail hover">
+                <div class="row">
+                    <div class="col-xs-4 member-photo">
+                        <img src="{% if mem.photo %}{{seva.photo}}{%else%}{% static 'img/user.jpg' %} {%endif%}"
+                             class="img-responsive">
+                    </div>
+                    <div class="col-xs-8 member-summary">
+                        <div>
+                            <span class="label label-info">MID#{{mem.mid}}</span>
+                    <span class="hover-show">
+                            <span class="view-member" style="margin-left: 10px;overflow: hidden;">
+                                <a href="{% url 'member-view' mem.id %}"><i class="glyphicon glyphicon-eye-open view-details"></i>
+                                    View</a>
+                            </span>
+                            <span class="edit-member" style="margin-left: 10px;">
+                                <a href="{% url 'member-edit' mem.id %}"><i class="glyphicon glyphicon-edit edit-member-details"
+                                      style="margin-right: 4px;"></i>Edit</a>
+                            </span>
+                            <span class="select-member" style="margin-left: 10px;">
+                                <a href="{% url 'member-view' mem.id %}" name="select"><i class="glyphicon glyphicon-edit edit-member-details"
+                                      style="margin-right: 4px;"></i>Select</a>
+                            </span>
+                    </span>
+                        </div>
+                        <div style="font-weight:bold;">
+                            Sri {{mem.name}} {{mem.surname}}
+                        </div>
+
+                        <div><span title="Place"><i class="icon-map-marker"></i> {{mem.place}} </span></div>
+
+
+                        <div><span title="Email"><i class="icon-envelope"></i> {{mem.email}}</span>
+                        </div>
+
+                        <div>
+                            <span title="Mobile"><i class="icon-mobile-phone"></i> {{mem.mobile}}</span>
+                            ,
+                            <span title="Phone"><i class="icon-phone"></i> {{mem.phone}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% block javascripts %}
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="{% static 'js/humane.min.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $(document).on("click",".select-member", function(){
+         $(this).toggleClass("highlight");
+     });
+});
+/**
+            if($(this).is(':checked')){
+                $("table.sevas tr.member-tile").addClass("highlight");
+            }else{
+                $("table.sevas tr.member-tile").removeClass("highlight");
+            }
+
+        }
+)}**/
+</script>
+{% endblock javascripts %}
+

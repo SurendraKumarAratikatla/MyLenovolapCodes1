@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Monthly Report</h1>
+        </div>
+        <div class="section">
+            <div class=" form-inline center">
+                <select id="seva_category" name="seva_category">
+                    <option value="" selected="selected">---Select Seva Category---</option>
+                    {% for seva in sevas %}
+                        <option value="{{ seva.id }}">{{ seva.name|capfirst }}</option>
+                    {% endfor %}
+                </select>
+                <select id="month" name="month" class="input-medium">
+                    <option value="">--Select Month--</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <button class="btn btn-success" name="get_monthly_sevas" style="margin-left:5px;" onclick="update_seva_monthly();" > Get Report
+                </button>
+            </div>
+            <div id="monthly-search"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+
+<script type="text/javascript">
+
+function update_seva_monthly() {
+    var month = $("#month").val();
+    var sid = $('#seva_category').val();
+    $.ajax({
+        url: "{% url 'seva-month-search' %}",
+        dataType: "html",
+        data:{sid: sid, month: month},
+        success: function(result) {
+            $("#monthly-search").html(result);
+        },
+        error: function() {}
+    });
+}
+
+</script>
+{% endblock javascripts %}

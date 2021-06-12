@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Award Member List</h1>
+        </div>
+         <table id="awardees-list" class="table table-striped table-condensed dataTable no-footer"
+                   style="margin-top: 20px; width: 1200px;" role="grid" aria-describedby="awardees-list_info">
+                <thead>
+                <tr class="printer-hide awardees-actions" role="row">
+                    <td colspan="5" style="margin-bottom: 10px;" rowspan="1">
+                        <div class="pull-left">
+                            <a href="/admin/members" class="add-awardee btn btn-default">
+                                <i class="glyphicon glyphicon-plus" style="margin-right: 5px;"></i> Add
+                            </a>
+                        </div>
+                        <div class="form-inline pull-right" role="form">
+                            <label>
+                                Search by
+                                <select name="searchby"  class="form-control search-field">
+                                    <option name='year' value="year">Awardee year</option>
+                                    <option name='specialization' value="specialization">Specialisation</option>
+                                    <option name='name' value="name">Awardee name</option>
+                                </select>
+                                <input name="search" type="search input-large" class="form-control search-text" id="search">
+                            </label>
+                            <button class="btn btn-success" name="getawardees" style="margin-left:5px;" onclick="update_awardeelist();"> Go</button>
+                        </div>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        <div class="section">
+            <table id="awardees-list" class="table table-striped table-condensed dataTable no-footer"
+                   style="margin-top: 20px; width: 1200px;" role="grid" aria-describedby="awardees-list_info">
+                <thead>
+                <tr class="printer-hide awardees-actions" role="row">
+                    <td colspan="5" style="margin-bottom: 20px;" rowspan="1">
+                        <div class="pull-right">
+                          <a href="{% url 'export-awardee' %}" type="button" class="export-awardees btn btn-default" name="export">
+                                <i class="fa fa-export" style="margin-right: 5px;"></i> Export
+                            </a>
+                        </div>
+
+                   </tr>
+                <tr role="row">
+                    <th data-id="photo" class="sorting_asc" rowspan="1" colspan="1" aria-label="Photo"
+                        style="width: 86px;">Photo
+                    </th>
+                    <th data-id="memberName" class="no-wrap sorting" tabindex="0" aria-controls="awardees-list"
+                        rowspan="1" colspan="1" aria-label="Member Name: activate to sort column ascending"
+                        style="width: 333px;">Member Name
+                    </th>
+                    <th data-id="name" class="no-wrap sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Award: activate to sort column ascending" style="width: 234px;">Award
+                    </th>
+                    <th data-id="year" class="sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Year: activate to sort column ascending" style="width: 40px;">Year
+                    </th>
+                    <th data-id="specialization" class="sorting" tabindex="0" aria-controls="awardees-list" rowspan="1"
+                        colspan="1" aria-label="Specialisation: activate to sort column ascending"
+                        style="width: 406px;">Specialisation
+                    </th>
+                    <th class="center clickable sorting_disabled" rowspan="1" colspan="1" aria-label=""
+                        style="width: 41px;"></th>
+                </tr>
+                </thead>
+                {% for awardee in awardees %}
+                    <tr>
+                        <td>
+                            <div>
+                                <img src="{% static 'img/user.jpg' %}" width="70px" height="80px" alt="image" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="label label-primary" title="Member Id">MID#{{ awardee.member.mid }}</div>
+                            <div>{{ awardee.member.name|capfirst }}</div>
+                        </td>
+                        <td>
+                            {{ awardee.name|capfirst }}
+                        </td>
+                        <td>
+                            {{ awardee.year }}
+                        </td>
+                        <td>
+                            {{ awardee.specialization }}
+                        </td>
+                        <td class=" center clickable"><span class="edit-awardee" title="edit"><a
+                                href="{% url 'member-edit' awardee.member.id %}"><span
+                                class="glyphicon glyphicon-pencil"></span></a></span> <span class="view-awardee"
+                                                                                            title="view"><a
+                                href="{% url 'member-view' awardee.member.id %}"><span
+                                class="glyphicon glyphicon-eye-open"></span></a></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div id="awardee-search"></div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+
+{% block javascripts %}
+<script type="text/javascript">
+
+function update_awardeelist() {
+
+    var searchBy = $('select[name="searchby"]').val();
+    var data = {};
+
+    if (searchBy == "year") {
+        console.log("Inside log")
+        searchKey = $.trim($('input[name="search"]').val());
+        data["year"] = searchKey
+    } else if (searchBy == "specialization") {
+        searchKey = $.trim($('input[name="search"]').val());
+        data['specialization'] = searchKey
+    } else if (searchBy == 'name') {
+        searchKey = $.trim($('input[name="search"]').val());
+        data["name"] = searchKey
+    }
+    $(".btn-search-wrapper").addClass("searching");
+    $.ajax({
+        url: "{% url 'search-awardee' %}?q=" + searchBy,
+        data:data,
+        dataType: "html",
+        success: function(result) {
+             $(".section").hide();
+             $("#awardee-search").html(result);
+        },
+        error: function() {}
+    });
+}
+
+</script>
+{% endblock javascripts %}
+

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+<!--<link rel="stylesheet" href="{# static 'css/jquery-toggles.css' #}">-->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/jackedup.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="content">
+    <div class="page-header">
+        <h1>Manage Member Access</h1>
+    </div>
+    <div class="section">
+            <div class="row div-table-head hidden-xs">
+                <div class="col-sm-4" style="color:blue;"><b>User Name</b></div>
+                <div class="col-sm-4" style="color:blue;"><b>Email Id</b></div>
+                <div class="col-sm-4" style="color:blue;"><b>Status</b></div>
+            </div><br />
+            {% for user in users %}
+            <div class="row div-table-rows box-border-bottom">
+                <div class="visible-xs col-xs-4">User Name :</div>
+                <div class="col-sm-4 col-xs-8"> {{ user.username }} </div>
+                <div class="visible-xs col-xs-4">Email Id :</div>
+                <div class="col-sm-4 col-xs-8">{{ user.email }}</div>
+                <div class="col-xs-4 col-xs-8">{% if user.enabled == True %} Enabled {% else %} Disabled {% endif %}</div>
+                <span class="pull-right edit-user">
+                            <small><a href="{% url 'edit-user' user.id %}"><i class="fa fa-fw fa-edit"></i>Edit</a></small>
+                </span> 
+                <!--<div class="col-sm-4 col-xs-8 toggle-light">
+                </div>-->
+            </div>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+{% block javascripts %}
+<script src="{% static 'js/humane.min.js' %}"></script>
+<script type="text/javascript">
+var jacked = humane.create({baseCls: 'humane-jackedup', addnCls: 'humane-jackedup-success'})
+{% if request.GET.edit == '1' %}
+    jacked.log("User details saved successfully.");
+{% elif request.GET.add == '1' %}
+    jacked.log("User added successfully.");
+{% endif%}
+</script>
+{% endblock %}

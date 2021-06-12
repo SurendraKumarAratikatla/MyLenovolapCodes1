@@ -1,0 +1,107 @@
+{% load staticfiles %}
+{% load bootstrap %}
+{% if not seva_list %}
+<h3 xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">No Sevas</h3>
+{% else %}
+<table class="table sevas" border="0" width="100%">
+    <thead>
+    <tr>
+        <th colspan="2" class="name-sort" style="text-align :center" title="Sort">Donor</th>
+        <th class="place-sort" title="Sort">Place</th>
+        <th width="105px">In The Name Of</th>
+        <th width="68px">Seva Tithi</th>
+        <th>Address
+       {#% if export %#}
+        <span class="pull-right">
+            <a href="{% url 'export-maasam-seva-search' %}?sid={{sid}}&maasam_input={{maasam_input}}&" class="btn btn-primary btn-mini" name="export" ><i class="icon-download-alt"></i> &nbsp;Export</a>
+        </span>
+        {#% endif %#}
+        </th>
+    </tr>
+    </thead>
+    <tbody class="seva-tile-collection">
+    {% for seva in seva_list %}
+        <tr class="seva-tile">
+            <td style="width:100px;">
+                <div>
+                    <img src="{% static 'img/user.jpg' %}" width="100px" height="100px" alt="image" >
+                </div>
+            </td>
+            <td>
+                <div><span>MID#{{ seva.mid.mid }}</span>, <span> {{ seva.ssid }}</span></div>
+                <div title="Click to see member details" class="donor-name member-details">
+                    {{ seva.mid.name }} {{seva.mid.surname}}
+                </div>
+            </td>
+            <td style="position:relative;">
+                <i class="icon-map-marker" style="position:absolute;top:10px;left:-5px;" title="Place"></i>
+                <span style="text-transform:capitalize;" title="Place">{{ seva.mid.place }}</span>
+            </td>
+            <td style="width:200px;">
+                {% if seva.inthenameof == 'donor' or seva.inthenameof == 'Donor' %}
+                    <div>
+                        {% if seva.mid.salutation %} {{seva.mid.salutation}} {%else%}Sri{%endif%}
+                        {{seva.mid.name}} {{seva.mid.surname}}
+                    </div>
+
+                    {% if seva.mid.gotram %}
+                    <div class="muted" style="text-transform:capitalize;">
+                        <span title="Gotram"><i class="fa fa-anchor"></i>  {{seva.mid.gotram}}</span>
+                    </div>
+                    {%endif%}
+
+                    {% if seva.mid.nakshatram %}
+                        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> {{seva.mid.nakshatram}}</span></div>
+                    {%endif%}
+                {%else%}
+                    <div style="text-transform:capitalize;">{{seva.inTheNameOf}}</div>
+                       {% if seva.gotram %}
+                    <div class="muted" style="text-transform:capitalize;">
+                        <span title="Gotram"><i class="fa fa-anchor"></i>  {{seva.gotram}}</span>
+                    </div>
+                    {%endif%}
+                    {% if seva.nakshatram %}
+                        <div class="muted" style="text-transform:capitalize;"><span title="Nakshatram"><i class="icon-star"></i> {{seva.nakshatram}}</span></div>
+                    {%endif%}
+                {%endif%}
+
+                   {% if seva.occasion %}
+                    <div class="muted" style="text-transform:capitalize;"><span title="Occasion"><i class="fa fa-gift"></i> {{seva.occasion}}</span></div>
+                   {%endif%}
+            </td>
+            <td>
+                {{ seva.tithi | capfirst }}
+            </td>
+            <td class="muted" style="width:300px;">
+                {%if seva.mid.full_address %}
+                {% with ad=seva.mid.full_address %}
+                <div>{{ad.address}}</div>
+                <div>{{ad.city| add:","}}{{ad.district| add:","}}{{ad.state}}
+                </div>
+                <div>{{ad.country}} {{ad.pin}}</div>
+                {% endwith %}
+                {% endif %}
+                <div style="margin-top:5px;">
+                    <span title="Email"><i class="icon-envelope"></i> {{ seva.mid.email }}</span>
+                </div>
+                <div>
+                    <span style="margin-right:10px;" title="Phone"><i class="fa fa-phone"></i>{{ seva.mid.phone }}</span>
+                    <span title="Mobile"><i class="fa fa-mobile"></i>{{ seva.mid.mobile }}</span>
+                </div>
+            </td>
+            {% if not export %}
+            <td class="seva-tile-actions" style="width:60px;">
+                <div class="seva-tile-actions-list details">
+                    <small><a href="{% url 'member-view' seva.mid.id %}">
+                        <i class="icon-eye-open seva-details pull-left" style="position:relative;top:2px;">
+
+                    </i>
+                    Details</a></small>
+                </div>
+            </td>
+            {%endif%}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}

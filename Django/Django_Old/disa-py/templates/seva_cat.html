@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load permission_tags %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html' %}{% endblock body_header %}
+{% block body %}
+    <div class="container">
+        <div class="content">
+            <div class="page-header">
+                <h1>Seva Categories
+                    {% if user|can:'ADD_SEVA_CATEGORY' %}
+                    <span class="pull-right btn btn-success add" style="margin-top:12px;"
+                                          title="Add new seva category">
+                        <i class="icon-plus icon-white"></i> Add
+                    </span>
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="section">
+                <div id="loc-search">
+                    <table class="table sevas" border="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Organisation Name</th>
+                            <th>Location</th>
+                            <th>Amount(  <i class="fa fa-inr"></i> )</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="member-collection">
+                        {% for seva_cat in seva_cat_list %}
+                            <tr class="member-location">
+                                <td> {{ seva_cat.code }}</td>
+                                <td> {{ seva_cat.name }}</td>
+                                <td> {{ seva_cat.oid.name }}</td>
+                                <td> {{ seva_cat.location }}</td>
+                                <td> {{ seva_cat.amount }} <i class="fa fa-inr"></i></td>
+                                {% if seva_cat.status %}
+                                <td> Enabled</td>
+                                {% else %}
+                                <td> Disabled</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html' %}{% endblock body_footer %}

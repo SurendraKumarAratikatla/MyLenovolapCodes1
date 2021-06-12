@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div>
+            <div class="page-header">
+                <h2>
+                    <span class="header">Seva Kartas </span>
+                    <span class="pull-right">
+                        <div class="form-inline hide">
+                            <input type="text" class="input-small selectSevaDate hasDatepicker" name="to-date-input"
+                                   placeholder="Seva Date" id="dp1458374067266">
+                            <input type="hidden" class="input-small" name="sevaDate" value="2016-03-19">
+                            <button type="submit" class="btn btn-primary">Go</button>
+                        </div>
+                    </span>
+                </h2>
+            </div>
+            <div>
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a data-categoryid="all" data-toggle="tab">All Sevas</a></li>
+                    <li class=""><a data-toggle="tab">Shashwata Seva</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="Shashwata-Seva">
+                        <div class="dashboard-content">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="2" style="text-align:center">Donor</th>
+                                    <th>Place</th>
+                                    <th>Nakshatram</th>
+                                    <th>Gotram</th>
+                                </tr>
+                                </thead>
+                                <tbody class="dashboard-seva-collection">
+                                {%for seva in seva_list%}
+                                <tr class="dashboard-seva-tile">
+                                    <td width="80px">
+                                        <div>
+                                            <img src="{% if seva.mid.photo %}{{seva.mid.photo}}{%else%}{% static 'img/user.jpg' %} {%endif%}" width="100px" height="100px"
+                                                 alt="image" class="member-details-view details"
+                                                 title="See member details.">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <span>MID#{{seva.mid.mid}}</span>
+                                            <span style="margin-left: 10px;">{{seva.ssid}}</span>
+                                        </div>
+                                        <div>
+                                            <span class="muted" style="font-size: smaller;">
+                                                <i class="fa fa-user fa-fw"></i> InTheNameOf:
+                                            </span>
+                                            {{seva.mid.salutation}} {{seva.mid.name}}{{seva.mid.surname}}
+                                        </div>
+                                        <div style="position:relative;">
+                                            <span class="muted" title="Donor">
+                                            <i class="fa fa-fw fa-rupee" style="margin-right: 9px;"></i>
+                                            <i  class="fa fa-user fa-fw"
+                                               style="font-size: 10px;position: absolute;color: gray;left: 7px;top: 7px;"></i>
+                                                <span style="font-size: smaller;">Donor:</span>
+                                                {{seva.mid.salutation}} {{seva.mid.name}} {{seva.mid.surname}}
+                                            </span>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div title="Place">
+                                            <i class="icon-map-marker" style="margin-right:13px;"></i>
+                                            {{seva.mid.place}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div style="text-transform:capitalize;">
+                                            <span title="Nakshatram" class="muted">
+                                                {% if seva.mid.nakshatram or seva.nakshatram%}
+                                                <i class="icon-star"></i>
+                                                {% if seva.mid.nakshatram %}{{seva.mid.nakshatram}}{% elif seva.nakshatram %}{{seva.nakshatram}}{%endif%}
+                                                {%endif%}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="text-transform:capitalize;">
+                                            <span title="Gotram" class="muted">
+                                                {% if seva.mid.gotram%}
+                                                <i class="fa fa-fw fa-anchor"></i>
+                                                {{seva.mid.gotram}}
+                                                {%endif%}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}

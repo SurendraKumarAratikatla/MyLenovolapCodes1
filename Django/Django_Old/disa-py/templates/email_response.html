@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Mail Sent{% endblock %}
+{% block body_header %}{% include 'admin/header1.html'%}{% endblock body_header %}
+
+{% block bootstrap %}
+<link rel="stylesheet" href="{% static 'css/bootstrap3.css' %}">
+{% endblock %}
+{% block body %}
+
+    <div class="container">
+        <div class="content">
+            <h1>Your email has been sent successfully</h1>
+            <a href="{% url 'email' %}">GoBack</a>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}
+
+

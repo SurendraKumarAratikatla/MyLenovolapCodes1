@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% block title %}DISA{% endblock %}
+{% block body_header %}{% include 'admin/header.html'%}{% endblock body_header %}
+{% block body %}
+<div class="container">
+    <div class="content">
+        <div class="page-header">
+            <h1>Edit Organisations</h1>
+        </div>
+        <div class="span12">
+            <form class="form-horizontal" method="post">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a href="{%url 'organisation' %}" class="btn btn-default">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_footer %}{% include 'admin/footer.html'%}{% endblock body_footer %}

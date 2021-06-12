@@ -1,0 +1,130 @@
+{% autoescape on %}
+<script type="text/template" id="memberEditorTpl">
+    <div class="page-header">
+        <h1><% if(data.id) { %>Edit<% }else{ %>Add<% } %> Member</h1>
+    </div>
+    <div class="form-horizontal" role="form">
+        <div class="form-group">
+            <div  class="col-sm-3 col-sm-offset-2">
+                <% if(data.id) { %>
+                <h3>
+                <div  class="label label-info">
+                    <%= data.mid %>
+                </div>
+                </h3>
+                <% } %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="salutation">Salutation</label>
+
+            <div  class="col-sm-3">
+                <select name="salutation" id="salutation" class="form-control">
+                    <option value="">--Select Salutation--</option>
+                    <option value="Dr" <% if(data.salutation=='Dr'){ %>selected='selected'<% } %> >Dr</option>
+                    <option value="Mr" <% if(data.salutation=='Mr'){ %>selected='selected'<% } %> >Mr</option>
+                    <option value="Ms" <% if(data.salutation=='Ms'){ %>selected='selected'<% } %> >Ms</option>
+                    <option value="Mrs" <% if(data.salutation=='Mrs'){ %>selected='selected'<% } %> >Mrs</option>
+                    <option value="Sri" <% if(data.salutation=='Sri' || !data.salutation){ %>selected='selected'<% } %> >Sri</option>
+                    <option value="Smt" <% if(data.salutation=='Smt'){ %>selected='selected'<% } %> >Smt</option>
+                    <option value="Mssrs" <% if(data.salutation=='Mssrs'){ %>selected='selected'<% } %> >Mssrs</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="surname">Sur Name</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="surname" id="surname" value="<%=data.surname%>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="name">Name</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="name" id="name" value="<%=data.name %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label required" for="place">Place</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="place" id="place" value="<%=data.place %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="email">E-Mail</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" placeholder="Mail Id" name="email" id="email" value="<%=data.email%>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="mobile">Mobile</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="mobile" id="mobile" value="<%=data.mobile %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="phone">Phone</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="phone" id="phone" value="<%=data.phone%>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="dob">Date Of Birth</label>
+
+            <div  class="col-sm-3">
+                <div class="input-group">
+
+                <input class="form-control" type="text" name="birthDateInput" id="dob">
+                    <a class="input-group-addon"><i class="fa fa-calendar"></i></a>
+                    </div>
+                <input class="form-control" type="hidden" name="birthDate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="gotram">Gotram</label>
+
+            <div  class="col-sm-3">
+                <input class="form-control" type="text" name="gotram" id="gotram" placeholder="Gotram" value="<%=data.gotram %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="gender">Nakshatram</label>
+
+            <div  class="col-sm-3">
+                <select name="nakshatram" id="nakshatram" style="text-transform:capitalize;" class="form-control">
+                    <option value="">--Select Nakshatram--</option>
+                    <% _.each(data.nakshatramColl,function(nakshatram){ %>
+                        <option value="<%=nakshatram.nakshatram%>"
+                                <% if(data.nakshatram && nakshatram.nakshatram==data.nakshatram) { %>selected='selected' <% } %>
+                                ><%=nakshatram.nakshatram%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="gender">Gender</label>
+
+            <div  class="col-sm-3">
+                <select name="gender" id="gender" class="form-control">
+                    <option value="">--Select Gender--</option>
+                    <option value="m" <% if(data.gender=='m'){ %> selected='selected'<% } %> >Male</option>
+                    <option value="f" <% if(data.gender=='f'){ %> selected='selected'<% } %>>Female</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group section bg-info">
+            <div class="col-sm-10 col-sm-offset-2">
+                <button type="submit" name="submit"
+                        class="btn btn-primary">Save
+                </button>
+                <button type="button" name="cancel" class="btn btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+</script>
+{% endautoescape %}
