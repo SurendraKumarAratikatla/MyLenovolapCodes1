@@ -1,38 +1,13 @@
-# class fibonacci:
-#     def __init__(self,number):
-#         self.number = number
-#
-#     def gen_fibonacci(self):
-#         n1 = 0
-#         n2 = 1
-#         for i in range(0,self.number):
-#             #print('i is :'+str(i))
-#             #print('n1+ n   2 is:'+ str(n1+n2))
-#             if n1 <= self.number:
-#                 yield n1
-#                 n1, n2 = n2, n1 + n2
-#
-# f = fibonacci(20)
-#
-# print(f.gen_fibonacci())
-# for i in f.gen_fibonacci():
-#     print(i)
-#
 
-class f:
-    def __init__(self,max):
-        self.max = max
-
-    def fibo(self):
-        n1 = 0
-        n2 = 1
-        for i in range(0, self.max):
-            if n1 <= self.max:
-                yield n1
-                n1, n2 = n2, n1 + n2
-
-obj = f(10)
-Trace.Write(obj.fibo())
-
-for i in obj.fibo():
-    Trace.Write(i)
+l = [1, 2, 8, 3]
+#l = [5, 17, 1000, 11]
+b = 2
+temp = b
+ll = []
+s = [l[i:j:k] for k in range(1,len(l)) for i in range(len(l)) for j in range(b, len(l)+1) if len(l[i:j:k]) == b and sum(l[i:j:k]) <= 1000]
+for i in s:
+    if i not in ll:
+        ll.append(i)
+print(ll)
+print(len(ll))
+#print(len(set(s)))

@@ -232,16 +232,16 @@ class DemoApp(MDApp):
 
         # code for call to make order
 
-        if instance.icon == 'phone':
-            account_sid = 'AC01b96e6ad4777b98b21ee5cd82b37365'
-            auth_token = 'b82b160693c854b6ee542d23621e87c6'
-
-            client = Client(account_sid, auth_token)
-
-            call = client.calls.create(twiml='<Response><Say>Hello Surendra</Say></Response>', to='+918500906002',
-                                       from_='+12513255394')
-
-            print(call.sid)
+        # if instance.icon == 'phone':
+        #     account_sid = 'AC01b96e6ad4777b98b21ee5cd82b37365'
+        #     auth_token = 'b82b160693c854b6ee542d23621e87c6'
+        #
+        #     client = Client(account_sid, auth_token)
+        #
+        #     call = client.calls.create(twiml='<Response><Say>Hello Surendra</Say></Response>', to='+918500906002',
+        #                                from_='+12513255394')
+        #
+        #     print(call.sid)
 
 
 

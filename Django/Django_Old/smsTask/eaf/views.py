@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import JsonResponse,HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import EAFListSerializer, EAFListSerializerCommodity
@@ -8,10 +6,6 @@ from .models import ChemicalElement, Commodity
 @api_view(['GET'])
 def apiOverview(request):
     return Response("API VIEW")
-
-
-
-
 
 # for ChemicalElement view
 

@@ -11,7 +11,7 @@ class Queue:
 
     def popq(self):
         if len(self.queue) > 0:
-            return self.queue.pop(0)
+            return self.queue.pop()
         else:
             return f"no elements in queue"
 
